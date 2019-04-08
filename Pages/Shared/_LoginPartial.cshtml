@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CarService.Dal.Entities
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<system.web>
+    <globalization fileEncoding="utf-8" />
+</system.web>
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Szemelyes
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="nav-link dropdown-item" asp-area="ClientUser" asp-page="/Cars/BrowseCar">Autóim</a>
+                <a class="nav-link dropdown-item" asp-area="ClientUser" asp-page="">Szervizeim</a>
+                <div class="dropdown-divider"></div>
+                <a class="nav-link dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profilom</a>
+            </div>
+
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <button type="submit" class="nav-link btn btn-link text-dark">Kijelentkezes</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Regisztracio</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Belepes</a>
+        </li>
+    }
+</ul>
