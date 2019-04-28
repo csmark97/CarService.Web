@@ -1,0 +1,61 @@
+﻿@page
+@model CarService.Web.Areas.Client.Pages.Cars.DetailsCarModel
+
+@{
+    ViewData["Title"] = "DetailsCar";
+}
+
+<h1>Részletes adatok</h1>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.Car.Model) @Html.DisplayFor(model => model.Car.YearOfManufacture)</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Márka
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Car.Brand)
+        </dd>
+        <dt class="col-sm-2">
+            Modell
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Car.Model)
+        </dd>
+        <dt class="col-sm-2">
+            Rendszám
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Car.LicensePlateNumber)
+        </dd>
+        <dt class="col-sm-2">
+            Alvázszám
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Car.Vin)
+        </dd>
+        <dt class="col-sm-2">
+            Gyártási év
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Car.YearOfManufacture)
+        </dd>
+        <dt class="col-sm-2">
+            Futott km
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Car.Km)
+        </dd>
+        <dt class="col-sm-2">
+            Műszaki érvényességi ideje
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Car.TechnicalValidity)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./EditCar" asp-route-id="@Model.Car.Id">Szerkesztés</a> |
+    <a asp-page="./BrowseCar">Vissza a teljes listára</a>
+</div>

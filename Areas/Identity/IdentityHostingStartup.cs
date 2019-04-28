@@ -1,5 +1,6 @@
 ﻿using System;
 using CarService.Dal;
+using CarService.Dal.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;

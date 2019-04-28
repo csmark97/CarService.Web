@@ -1,40 +1,57 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using CarService.Dal.Entities
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 
 <system.web>
     <globalization fileEncoding="utf-8" />
 </system.web>
 
 <ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
+    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Clients"))
     {
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Szemelyes
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="nav-link dropdown-item" asp-area="ClientUser" asp-page="/Cars/BrowseCar">Autóim</a>
-                <a class="nav-link dropdown-item" asp-area="ClientUser" asp-page="">Szervizeim</a>
-                <div class="dropdown-divider"></div>
-                <a class="nav-link dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profilom</a>
-            </div>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Személyes
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="nav-link dropdown-item" asp-area="Client" asp-page="/Cars/BrowseCar">Autóim</a>
+            <a class="nav-link dropdown-item" asp-area="Client" asp-page="">Szervizeim</a>
+            <div class="dropdown-divider"></div>
+            <a class="nav-link dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profilom</a>
+        </div>
 
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Kijelentkezes</button>
-            </form>
-        </li>
+    </li>
+    <li class="nav-item">
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+            <button type="submit" class="nav-link btn btn-link text-dark">Kijelentkezés</button>
+        </form>
+    </li>
+    }
+    else if (SignInManager.IsSignedIn(User) && User.IsInRole("Workers"))
+    {
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Személyes
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="nav-link dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profilom</a>
+        </div>
+
+    </li>
+    <li class="nav-item">
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+            <button type="submit" class="nav-link btn btn-link text-dark">Kijelentkezés</button>
+        </form>
+    </li>
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Regisztracio</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Belepes</a>
-        </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Regisztráció</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Belépés</a>
+    </li>
     }
 </ul>

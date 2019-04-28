@@ -1,0 +1,52 @@
+﻿@page
+@model CarService.Web.Areas.Worker.Pages.ManageSubTasks.BrowseSubTaskModel
+
+@{
+    ViewData["Title"] = "BrowseSubTasks";
+}
+
+<h1>Szervízek kezelése</h1>
+
+<div class="row">
+    @foreach (var item in Model.SubTasks)
+    {
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-3" >
+            <div class="card">
+                <a asp-page="./DetailsCar" asp-route-id="@item.Id">
+                    <img class="card-img-top" src="https://lkb-autoszerviz.hu/wp-content/uploads/2015/03/autojavito.jpg" alt="Autója képe" title="További adatok"> 
+                </a>
+                <div class="card-body">
+                    <h4 class="card-title" title="További adatok">
+                        <a asp-page="./DetailsSubTask" asp-route-id="@item.Id">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </a>
+                    </h4>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Becsült költség: @Html.DisplayFor(modelItem => item.EstimatedPrice) Ft</li>
+                    <li class="list-group-item">Becsült munkaidő: @Html.DisplayFor(modelItem => item.EstimtedTime) perc</li>
+                </ul>
+                <div class="card-body text-right">
+                    <a asp-page="./EditSubTask" asp-route-id="@item.Id"><i class="fas fa-edit fa-lg" title="Módosítás"></i></a>
+                    <a asp-page="./DeleteSubTask" asp-route-id="@item.Id"><i class="fas fa-trash-alt fa-lg" title="Törlés"></i></a>                    
+                </div>
+            </div>
+        </div>
+    }
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+        <div class="card">
+            <div class="text-center">
+                <a class="" asp-area="Worker" asp-page="/ManageSubTasks/AddSubTask">
+                    <i class="fas fa-plus-circle card-img-top plus-card fa-7x" title="Hozzáadás"></i>
+                </a>
+            </div>
+                <div class="card-body">
+                    <h5 class="card-title text-center">
+                        <a class="" asp-area="Worker" asp-page="/ManageSubTasks/AddSubTask">
+                            Új szervíztípus hozzáadása
+                        </a>
+                    </h5>
+                </div>
+        </div>
+    </div>
+</div>

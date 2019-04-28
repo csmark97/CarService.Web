@@ -17,7 +17,10 @@ namespace CarService.Web
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().MigrateDatabase<CarServiceDbContext>().Run();            
+            (CreateWebHostBuilder(args)
+            .Build()
+            .MigrateDatabase<CarServiceDbContext>())
+            .Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

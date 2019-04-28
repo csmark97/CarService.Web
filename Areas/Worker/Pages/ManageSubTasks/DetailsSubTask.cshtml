@@ -1,0 +1,37 @@
+﻿@page
+@model CarService.Web.Areas.Worker.Pages.ManageSubTasks.DetailsSubTaskModel
+
+@{
+    ViewData["Title"] = "DetailsSubTask";
+}
+
+<h1>Szervíztípus</h1>
+
+<div>
+    <h4>Részletek</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Elnevezés
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SubTask.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Becsült költség
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SubTask.EstimatedPrice)
+        </dd>
+        <dt class="col-sm-2">
+            Becsült munkaidő
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SubTask.EstimtedTime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./EditSubTask" asp-route-id="@Model.SubTask.Id">Módosítás</a> |
+    <a asp-page="./BrowseSubTasks">Vissza a teljes listára</a>
+</div>

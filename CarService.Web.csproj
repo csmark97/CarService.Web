@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>aspnet-CarService.Web-FE6647B5-5AB5-4E21-B927-C7CFB29F69EC</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
 
@@ -16,6 +17,19 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CarService.Dal\CarService.Dal.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Areas\Company\" />
+    <Folder Include="Areas\Worker\Pages\Works\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Update="Areas\Worker\Pages\_ValidationScriptsPartial.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

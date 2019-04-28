@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using CarService.Dal.SeedInterfaces;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -18,6 +19,9 @@ namespace CarService.Web.Hosting
                 var serviceProvider = scope.ServiceProvider;
                 var context = serviceProvider.GetRequiredService<TContext>();
                 context.Database.Migrate();
+
+                //var roleSeeder = serviceProvider.GetRequiredService<IRoleSeedService>();
+                //await roleSeeder.SeedRoleAsync();
             }
             return host;
         }

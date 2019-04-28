@@ -3,8 +3,20 @@
 @{
     ViewData["Title"] = "Home page";
 }
+@using Microsoft.AspNetCore.Identity
+@using CarService.Dal.Entities
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 
-<div class="text-center">
-    <h1 class="display-4">Üdvözöljük</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (SignInManager.IsSignedIn(User) && User.IsInRole("Workers"))
+{
+    <div class="text-center">
+        <h1 class="display-4">Üdvözöljük a dolgozói felületen!</h1>
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4">Üdvözöljük a felhasználói felületen!</h1>
+    </div>
+}

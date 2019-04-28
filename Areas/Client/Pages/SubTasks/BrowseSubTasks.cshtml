@@ -1,0 +1,32 @@
+﻿@page
+@model CarService.Web.Areas.Client.Pages.SubTasks.BrowseSubTaskModel
+
+@{
+    ViewData["Title"] = "BrowseSubTasks";
+}
+
+<h1>Szervíz típusok</h1>
+
+<div class="row">
+    @foreach (var item in Model.SubTasks)
+    {
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-3" >
+            <div class="card">
+                <a asp-page="./MakeAppointment" asp-route-id="@item.Id">
+                    <img class="card-img-top" src="https://lkb-autoszerviz.hu/wp-content/uploads/2015/03/autojavito.jpg" alt="Autója képe" title="További adatok"> 
+                </a>
+                <div class="card-body">
+                    <h4 class="card-title" title="Időpontot foglalok">
+                        <a asp-page="./MakeAppointment" asp-route-id="@item.Id">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </a>
+                    </h4>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Becsült költség: @Html.DisplayFor(modelItem => item.EstimatedPrice) Ft</li>
+                    <li class="list-group-item">Becsült munkaidő: @Html.DisplayFor(modelItem => item.EstimtedTime) perc</li>
+                </ul>
+            </div>
+        </div>
+    }
+</div>

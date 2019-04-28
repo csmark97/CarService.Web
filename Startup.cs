@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using CarService.Dal;
 using CarService.Dal.Entities;
+using CarService.Dal.SeedInterfaces;
+using CarService.Dal.SeedService;
 
 namespace CarService.Web
 {
@@ -36,13 +38,16 @@ namespace CarService.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
             services.AddDbContext<CarServiceDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString(nameof(CarServiceDbContext))));
-            services.AddDefaultIdentity<ApplicationUser>()
+            //services.AddDefaultIdentity<User>().AddDefaultUI(UIFramework.Bootstrap4)
+            //    .AddEntityFrameworkStores<CarServiceDbContext>();
+            services.AddIdentity<User, IdentityRole<string>>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<CarServiceDbContext>();
+
+            services.AddScoped<IRoleSeedService, RoleSeedService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

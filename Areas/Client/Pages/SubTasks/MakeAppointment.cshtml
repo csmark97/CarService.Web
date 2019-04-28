@@ -1,0 +1,66 @@
+﻿@page
+@model CarService.Web.Areas.Client.Pages.SubTasks.MakeAppointmentModel
+@{
+}
+@using System;
+@{DateTime today = DateTime.Today;}
+@{var culture = new System.Globalization.CultureInfo("hu-HU");}
+<h1>Időpont foglalása</h1>
+<hr>
+<div class="form-group">
+    <div class="row">
+        @for (int i = 0; i < 7; i++)
+        {
+            <div class="col border text-center">
+                <div class="mini-box flex-fill">
+                    @today.AddDays(i).ToShortDateString()
+                </div>
+                <div class="mini-box flex-fill">
+                    @culture.DateTimeFormat.GetDayName(today.AddDays(i).DayOfWeek)
+                </div>
+            </div>
+        }
+    </div>   
+
+    @for (int i = 7; i < 18; i++)
+    {
+        <div class="row">
+            @for (int j = 0; j < 7; j++)
+            {
+                @if (j % 2 == 0 && today.AddDays(j).DayOfWeek != DayOfWeek.Saturday && today.AddDays(j).DayOfWeek != DayOfWeek.Sunday)
+                {
+                    <div class="col text-center calendar-button-group">
+                        <div class="mini-box flex-fill border calendar-button-div">
+                            <button type="button" class="btn btn-primary btn-sm calendar-button">@i:00</button>
+                        </div>
+                        <div class="mini-box flex-fill border calendar-button-div">
+                            <button type="button" class="btn btn-primary btn-sm calendar-button">@i:30</button>
+                        </div>
+                    </div>
+                }
+                else if (j % 2 == 1 && today.AddDays(j).DayOfWeek != DayOfWeek.Saturday && today.AddDays(j).DayOfWeek != DayOfWeek.Sunday)
+                {
+                    <div class="col text-center calendar-button-group">
+                        <div class="mini-box flex-fill border calendar-button-div">
+                            <button type="button" class="btn btn-info btn-sm calendar-button">@i:00</button>
+                        </div>
+                        <div class="mini-box flex-fill border calendar-button-div">
+                            <button type="button" class="btn btn-info btn-sm calendar-button">@i:30</button>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col text-center calendar-button-group">
+                        <div class="mini-box flex-fill border calendar-button-div">
+                            <button type="button" class="btn btn-secondary btn-sm calendar-button">@i:00</button>
+                        </div>
+                        <div class="mini-box flex-fill border calendar-button-div">
+                            <button type="button" class="btn btn-secondary btn-sm calendar-button">@i:30</button>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+</div>

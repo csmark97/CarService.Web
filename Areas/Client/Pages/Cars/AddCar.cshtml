@@ -1,0 +1,71 @@
+﻿@page
+@model CarService.Web.Areas.Client.Pages.Cars.AddCarModel
+
+@{
+    ViewData["Title"] = "AddCar";
+}
+
+<h1>Autó hozzáadása</h1>
+
+
+<hr />
+<form method="post">
+    <h4>Autó</h4>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label asp-for="Car.Brand" class="control-label">Márka</label>
+                <input asp-for="Car.Brand" class="form-control" />
+                <span asp-validation-for="Car.Brand" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Car.Model" class="control-label">Modell</label>
+                <input asp-for="Car.Model" class="form-control" />
+                <span asp-validation-for="Car.Model" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Car.LicensePlateNumber" class="control-label">Rendszám</label>
+                <input asp-for="Car.LicensePlateNumber" class="form-control" />
+                <span asp-validation-for="Car.LicensePlateNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Car.Vin" class="control-label">Alvázszám</label>
+                <input asp-for="Car.Vin" class="form-control" />
+                <span asp-validation-for="Car.Vin" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label asp-for="Car.YearOfManufacture" class="control-label">Gyártási év</label>
+                <input asp-for="Car.YearOfManufacture" class="form-control" />
+                <span asp-validation-for="Car.YearOfManufacture" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Car.Km" class="control-label">Futott km</label>
+                <input asp-for="Car.Km" class="form-control" />
+                <span asp-validation-for="Car.Km" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Car.TechnicalValidity" class="control-label">Műszaki érvényességi ideje</label>
+                <input asp-for="Car.TechnicalValidity" class="form-control" />
+                <span asp-validation-for="Car.TechnicalValidity" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Kép felöltése</label>
+        <input class="form-control-file" type="file" name="files">
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Hozzáadás" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-page="./BrowseCar">Vissza a teljes listára</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

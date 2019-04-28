@@ -1,0 +1,45 @@
+﻿@page
+@model CarService.Web.Areas.Worker.Pages.ManageSubTasks.EditSubTaskModel
+
+@{
+    ViewData["Title"] = "EditSubTask";
+}
+
+<h1>Szervíztípus</h1>
+
+<h4>Szerkesztés</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SubTask.Id" />
+            <div class="form-group">
+                <label asp-for="SubTask.Name" class="control-label">Elnevezés</label>
+                <input asp-for="SubTask.Name" class="form-control" />
+                <span asp-validation-for="SubTask.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubTask.EstimatedPrice" class="control-label">Becsült költség</label>
+                <input asp-for="SubTask.EstimatedPrice" class="form-control" step="1000"/>
+                <span asp-validation-for="SubTask.EstimatedPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubTask.EstimtedTime" class="control-label">Becsült munkaidő</label>
+                <input asp-for="SubTask.EstimtedTime" step="30" min="30" class="form-control" />
+                <span asp-validation-for="SubTask.EstimtedTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Módosítás" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./BrowseSubTasks">Vissza a teljes listára</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

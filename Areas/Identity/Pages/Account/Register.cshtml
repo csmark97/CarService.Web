@@ -4,16 +4,21 @@
     ViewData["Title"] = "Regisztráció";
 }
 @using CarService.Dal.Entities
-
+@using CarService.Dal.Users
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="column">
-    <div class="col-md-8">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Hozzon létre új fiókot!</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
+<form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+    <h4>Hozzon létre új felhasználói fiókot!</h4>
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label asp-for="Input.Name"></label>
+                <input asp-for="Input.Name" class="form-control" />
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Input.Email"></label>
                 <input asp-for="Input.Email" class="form-control" />
@@ -29,38 +34,144 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                <label asp-for="Input.Name"></label>
-                <input asp-for="Input.Name" class="form-control" />
-                <span asp-validation-for="Input.Name" class="text-danger"></span>
-            </div>
+                <label asp-for="Input.UserType"></label>
+                @Html.DropDownList("Input.UserType", Model.Options, new { @class = "form-control" })
 
+            </div>
+        </div>
+        <div class="col">
             <div class="form-group">
                 <label asp-for="Input.PhoneNumber"></label>
                 <input asp-for="Input.PhoneNumber" class="form-control" />
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
-                <label asp-for="Input.UserType"></label>
-                @Html.DropDownList("Input.UserType",
-                      new SelectList(Enum.GetValues(typeof(UserType))),
-                      "Válassza ki a fiók típusát!",
-                      new { @class = "form-control" })
+            <div class="form-group address">
+                <label asp-for="Input.Zip"></label>
+                <input asp-for="Input.Zip" class="form-control" />
+                <span asp-validation-for="Input.Zip" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
-                <label asp-for="Input.CompanyId"></label>
-                <input asp-for="Input.CompanyId" class="form-control" />
-                <span asp-validation-for="Input.CompanyId" class="text-danger"></span>
+            <div class="form-group address">
+                <label asp-for="Input.City"></label>
+                <input asp-for="Input.City" class="form-control" />
+                <span asp-validation-for="Input.City" class="text-danger"></span>
             </div>
-
-            <button type="submit" class="btn btn-primary">Register</button>
-        </form>
+            <div class="form-group address">
+                <label asp-for="Input.Street"></label>
+                <input asp-for="Input.Street" class="form-control" />
+                <span asp-validation-for="Input.Street" class="text-danger"></span>
+            </div>
+            <div class="form-group address">
+                <label asp-for="Input.HouseNumber"></label>
+                <input asp-for="Input.HouseNumber" class="form-control" />
+                <span asp-validation-for="Input.HouseNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group privatekey">
+                <label asp-for="Input.PrivateKey"></label>
+                <input asp-for="Input.PrivateKey" class="form-control" />
+                <span asp-validation-for="Input.PrivateKey" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <h5 class="opening"><b>Nyitvatartás</b></h5>
+            <div class="row form-group opening">
+                <div class="col form-group">
+                    <label asp-for="Input.StartMonday" class="control-label"></label>
+                    <input asp-for="Input.StartMonday" disabled class="form-control" asp-format="{0:t}" />
+                    <span asp-validation-for="Input.StartMonday" class="text-danger"></span>
+                </div>
+                <div class="col form-group">
+                    <label asp-for="Input.EndMonday" class="control-label">-</label>
+                    <input asp-for="Input.EndMonday" disabled class="form-control" asp-format="{0:t}" />
+                    <span asp-validation-for="Input.EndMonday" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group opening">
+                <div class="col form-group">
+                    <label asp-for="Input.StartTuesday" class="control-label"></label>
+                    <input asp-for="Input.StartTuesday" disabled class="form-control" asp-format="{0:t}" />
+                    <span asp-validation-for="Input.StartTuesday" class="text-danger"></span>
+                </div>
+                <div class="col form-group">
+                    <label asp-for="Input.EndTuesday" class="control-label">-</label>
+                    <input asp-for="Input.EndTuesday" disabled class="form-control" asp-format="{0:t}" />
+                    <span asp-validation-for="Input.EndTuesday" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group opening">
+                <div class="col form-group">
+                    <label asp-for="Input.StartWednesday" class="control-label"></label>
+                    <input asp-for="Input.StartWednesday" disabled class="form-control" asp-format="{0:t}" />
+                    <span asp-validation-for="Input.StartWednesday" class="text-danger"></span>
+                </div>
+                <div class="col form-group">
+                    <label asp-for="Input.EndWednesday" class="control-label">-</label>
+                    <input asp-for="Input.EndWednesday" disabled class="form-control" asp-format="{0:t}" />
+                    <span asp-validation-for="Input.EndWednesday" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group opening">
+                <div class="col form-group">
+                    <label asp-for="Input.StartThursday" class="control-label"></label>
+                    <input asp-for="Input.StartThursday" disabled class="form-control" asp-format="{0:t}" />
+                    <span asp-validation-for="Input.StartThursday" class="text-danger"></span>
+                </div>
+                <div class="col form-group">
+                    <label asp-for="Input.EndThursday" class="control-label">-</label>
+                    <input asp-for="Input.EndThursday" disabled class="form-control" asp-format="{0:t}" />
+                    <span asp-validation-for="Input.EndThursday" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group opening">
+                <div class="col form-group">
+                    <label asp-for="Input.StartFriday" class="control-label"></label>
+                    <input asp-for="Input.StartFriday" disabled class="form-control" asp-format="{0:t}" />
+                    <span asp-validation-for="Input.StartFriday" class="text-danger"></span>
+                </div>
+                <div class="col form-group">
+                    <label asp-for="Input.EndFriday" class="control-label">-</label>
+                    <input asp-for="Input.EndFriday" disabled class="form-control" asp-format="{0:t}" />
+                    <span asp-validation-for="Input.EndFriday" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group opening">
+                <div class="col form-group">
+                    <label asp-for="Input.StartSaturday" class="control-label"></label>
+                    <input asp-for="Input.StartSaturday" class="form-control" asp-format="{0:t}" />
+                    <span asp-validation-for="Input.StartSaturday" class="text-danger"></span>
+                </div>
+                <div class="col form-group">
+                    <label asp-for="Input.EndSaturday" class="control-label">-</label>
+                    <input asp-for="Input.EndSaturday" class="form-control" asp-format="{0:t}" />
+                    <span asp-validation-for="Input.EndSaturday" class="text-danger"></span>
+                </div>
+                <div class="col checkbox">
+                    <label asp-for="Input.SaturdayOpen">-</label>
+                    <input asp-for="Input.SaturdayOpen" type="checkbox" data-toggle="toggle" data-on="Nyitva" data-off="Zárva">
+                </div>
+            </div>
+            <div class="row form-group opening">
+                <div class="col form-group">
+                    <label asp-for="Input.StartSunday" class="control-label"></label>
+                    <input asp-for="Input.StartSunday" class="form-control" asp-format="{0:t}" />
+                    <span asp-validation-for="Input.StartSunday" class="text-danger"></span>
+                </div>
+                <div class="col form-group">
+                    <label asp-for="Input.EndSunday" class="control-label">-</label>
+                    <input asp-for="Input.EndSunday" class="form-control" asp-format="{0:t}" />
+                    <span asp-validation-for="Input.EndSunday" class="text-danger"></span>
+                </div>
+                <div class="col checkbox">
+                    <label asp-for="Input.SundayOpen">-</label>
+                    <input asp-for="Input.SundayOpen" type="checkbox" data-toggle="toggle" data-on="Nyitva" data-off="Zárva">
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+    <button type="submit" class="btn btn-primary">Regisztrálok!</button>
+</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+<script src="/js/RegistrationFormChange.js"></script>

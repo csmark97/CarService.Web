@@ -16,14 +16,13 @@ namespace CarService.Web.Areas.Identity.Pages.Account.Manage
 {
     public partial class IndexModel : PageModel
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly IEmailSender _emailSender;
-        
-        public IReadOnlyCollection<ApplicationUser> ApplicationUsers { get; private set; }
+
         public IndexModel(
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -34,7 +33,6 @@ namespace CarService.Web.Areas.Identity.Pages.Account.Manage
         public string Username { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
-        public IList<ApplicationUser> applicationUsers { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -68,12 +66,11 @@ namespace CarService.Web.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var email = await _userManager.GetEmailAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
-            var myUser = context.ApplicationUser.Find(userId);
+            var name = _userManager.Users.Where(u => u.Id == userId).Select(n => new { n.Name });
 
             Input = new InputModel
             {
-                Fullname = myUser.Name,
+                Fullname = name.SingleOrDefault().Name,
                 Email = email,
                 PhoneNumber = phoneNumber
             };
