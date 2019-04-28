@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CarService.Dal;
 using CarService.Dal.Entities;
+using CarService.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -72,8 +73,7 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
 
         public async Task<IActionResult> OnPostAsync()
         {
-            //TODO: extension methodba kitenni
-            var userId = User.Claims.Single(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var userId = User.Claims.Single(c => c.Type == UserHelper.NameIdentifierString).Value;
             ClientUser clientUser = await _context.ClientUsers.FirstOrDefaultAsync(u => u.Id == userId);
 
             //if (!ModelState.IsValid)

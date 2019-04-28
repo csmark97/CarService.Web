@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CarService.Dal;
 using CarService.Dal.Entities;
 using Microsoft.AspNetCore.Identity;
+using CarService.Web.Helper;
 
 namespace CarService.Web.Areas.Worker.Pages.ManageSubTasks
 {
@@ -26,8 +27,7 @@ namespace CarService.Web.Areas.Worker.Pages.ManageSubTasks
 
         public async System.Threading.Tasks.Task OnGetAsync()
         {
-            //TODO: extension methodba kitenni
-            var userId = User.Claims.Single(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var userId = User.Claims.Single(c => c.Type == UserHelper.NameIdentifierString).Value;
             WorkerUser workerUser = await _context.WorkerUsers.FirstOrDefaultAsync(u => u.Id == userId);
 
             SubTasks = await _context.SubTasks

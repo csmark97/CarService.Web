@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using CarService.Dal;
 using CarService.Dal.Entities;
 using Microsoft.EntityFrameworkCore;
+using CarService.Web.Helper;
 
 namespace CarService.Web.Areas.Worker.Pages.ManageSubTasks
 {
@@ -36,8 +37,7 @@ namespace CarService.Web.Areas.Worker.Pages.ManageSubTasks
                 return Page();
             }
 
-            // TODO: extension methodba kitenni
-            var userId = User.Claims.Single(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var userId = User.Claims.Single(c => c.Type == UserHelper.NameIdentifierString).Value;
             
             string company = await _context.WorkerUsers.Where(u => u.Id == userId)
                 .Select(s => s.CompanyUserId)
