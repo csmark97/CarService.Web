@@ -21,6 +21,7 @@
                             @Html.DisplayFor(modelItem => item.Name)
                         </a>
                     </h4>
+                    <h6 class="card-subtitle">@Html.DisplayFor(modelItem => item.CompanyUser.Name)</h6>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Becsült költség: @Html.DisplayFor(modelItem => item.EstimatedPrice) Ft</li>

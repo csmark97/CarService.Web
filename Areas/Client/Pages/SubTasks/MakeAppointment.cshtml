@@ -7,10 +7,25 @@
 @{var culture = new System.Globalization.CultureInfo("hu-HU");}
 <h1>Időpont foglalása</h1>
 <hr>
+
 <div class="form-group">
-    <div class="row">
-        @for (int i = 0; i < 7; i++)
-        {
+    @*<div class="row">
+            @for (int i = 0; i < 7; i++)
+            {
+                <div class="col border text-center">
+                    <div class="mini-box flex-fill">
+                        @today.AddDays(i).ToShortDateString()
+                    </div>
+                    <div class="mini-box flex-fill">
+                        @culture.DateTimeFormat.GetDayName(today.AddDays(i).DayOfWeek)
+                    </div>
+                </div>
+            }
+        </div>*@
+
+    @for (int i = 0; i < 7; i++)
+    {
+        <div class="row">
             <div class="col border text-center">
                 <div class="mini-box flex-fill">
                     @today.AddDays(i).ToShortDateString()
@@ -19,48 +34,129 @@
                     @culture.DateTimeFormat.GetDayName(today.AddDays(i).DayOfWeek)
                 </div>
             </div>
-        }
-    </div>   
-
-    @for (int i = 7; i < 18; i++)
-    {
-        <div class="row">
-            @for (int j = 0; j < 7; j++)
+            @{int cycleCounter = 0;}
+            @for (int j = Model.Opening[today.AddDays(i).DayOfWeek].Start.Hour; j < Model.Opening[today.AddDays(i).DayOfWeek].End.Hour; j++)
             {
-                @if (j % 2 == 0 && today.AddDays(j).DayOfWeek != DayOfWeek.Saturday && today.AddDays(j).DayOfWeek != DayOfWeek.Sunday)
+                string btnClass;
+                int halfAnHourCount = (int)(Model.SubTask.EstimtedTime / 30);
+                @if (i % 2 == 0 && today.AddDays(i).DayOfWeek != DayOfWeek.Saturday && today.AddDays(i).DayOfWeek != DayOfWeek.Sunday)
                 {
-                    <div class="col text-center calendar-button-group">
-                        <div class="mini-box flex-fill border calendar-button-div">
-                            <button type="button" class="btn btn-primary btn-sm calendar-button">@i:00</button>
-                        </div>
-                        <div class="mini-box flex-fill border calendar-button-div">
-                            <button type="button" class="btn btn-primary btn-sm calendar-button">@i:30</button>
-                        </div>
-                    </div>
+                    btnClass = "btn-primary";
                 }
-                else if (j % 2 == 1 && today.AddDays(j).DayOfWeek != DayOfWeek.Saturday && today.AddDays(j).DayOfWeek != DayOfWeek.Sunday)
+                else if (i % 2 == 1 && today.AddDays(i).DayOfWeek != DayOfWeek.Saturday && today.AddDays(i).DayOfWeek != DayOfWeek.Sunday)
                 {
-                    <div class="col text-center calendar-button-group">
-                        <div class="mini-box flex-fill border calendar-button-div">
-                            <button type="button" class="btn btn-info btn-sm calendar-button">@i:00</button>
-                        </div>
-                        <div class="mini-box flex-fill border calendar-button-div">
-                            <button type="button" class="btn btn-info btn-sm calendar-button">@i:30</button>
-                        </div>
-                    </div>
+                    btnClass = "btn-info";
                 }
                 else
                 {
+                    btnClass = "btn-secondary";
+                }
+
+                if (halfAnHourCount == 1)
+                {
                     <div class="col text-center calendar-button-group">
                         <div class="mini-box flex-fill border calendar-button-div">
-                            <button type="button" class="btn btn-secondary btn-sm calendar-button">@i:00</button>
+                            <button type="button" class="btn @btnClass btn-sm calendar-button">@j:00</button>
                         </div>
                         <div class="mini-box flex-fill border calendar-button-div">
-                            <button type="button" class="btn btn-secondary btn-sm calendar-button">@i:30</button>
+                            <button type="button" class="btn @btnClass btn-sm calendar-button">@j:30</button>
                         </div>
                     </div>
                 }
+                else if (halfAnHourCount == 2)
+                {
+                    <div class="col text-center border calendar-button-group calendar-button-div">
+                        <button type="button" class="btn @btnClass btn-sm calendar-button">@j:00</button>
+                    </div>
+                }
+                else if (halfAnHourCount == 3)
+                {
+                    if (cycleCounter % 3 == 0)
+                    {
+                        <div class="col text-center border calendar-button-group  calendar-button-div">
+                            <button type="button" class="btn @btnClass btn-sm calendar-button">@j:00</button>
+                        </div>
+                    }
+                    else if (cycleCounter % 3 == 1)
+                    {
+                        <div class="col text-center border calendar-button-group calendar-button-div">
+                            <button type="button" class="btn @btnClass btn-sm calendar-button">@j:30</button>
+                        </div>
+                    }
+                    else { }
+
+                }
+                else if (halfAnHourCount == 4)
+                {
+                    if (cycleCounter % 2 == 0)
+                    {
+                        <div class="col text-center border calendar-button-group  calendar-button-div">
+                            <button type="button" class="btn @btnClass btn-sm calendar-button">@j:00</button>
+                        </div>
+                    }
+                }
+                cycleCounter++;
             }
         </div>
     }
 </div>
+
+@*<div class="form-group">
+        <div class="row">
+            @for (int i = 0; i < 7; i++)
+            {
+                <div class="col border text-center">
+                    <div class="mini-box flex-fill">
+                        @today.AddDays(i).ToShortDateString()
+                    </div>
+                    <div class="mini-box flex-fill">
+                        @culture.DateTimeFormat.GetDayName(today.AddDays(i).DayOfWeek)
+                    </div>
+                </div>
+            }
+        </div>
+
+
+        @for (int i = 7; i < 18; i++)
+        {
+            <div class="row">
+                @for (int j = 0; j < 7; j++)
+                {
+                    @if (j % 2 == 0 && today.AddDays(j).DayOfWeek != DayOfWeek.Saturday && today.AddDays(j).DayOfWeek != DayOfWeek.Sunday)
+                    {
+                        <div class="col text-center calendar-button-group">
+                            <div class="mini-box flex-fill border calendar-button-div">
+                                <button type="button" class="btn btn-primary btn-sm calendar-button">@i:00</button>
+                            </div>
+                            <div class="mini-box flex-fill border calendar-button-div">
+                                <button type="button" class="btn btn-primary btn-sm calendar-button">@i:30</button>
+                            </div>
+                        </div>
+                    }
+                    else if (j % 2 == 1 && today.AddDays(j).DayOfWeek != DayOfWeek.Saturday && today.AddDays(j).DayOfWeek != DayOfWeek.Sunday)
+                    {
+                        <div class="col text-center calendar-button-group">
+                            <div class="mini-box flex-fill border calendar-button-div">
+                                <button type="button" class="btn btn-info btn-sm calendar-button">@i:00</button>
+                            </div>
+                            <div class="mini-box flex-fill border calendar-button-div">
+                                <button type="button" class="btn btn-info btn-sm calendar-button">@i:30</button>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col text-center calendar-button-group">
+                            <div class="mini-box flex-fill border calendar-button-div">
+                                <button type="button" class="btn btn-secondary btn-sm calendar-button">@i:00</button>
+                            </div>
+                            <div class="mini-box flex-fill border calendar-button-div">
+                                <button type="button" class="btn btn-secondary btn-sm calendar-button">@i:30</button>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+
+    </div>*@

@@ -31,7 +31,6 @@ namespace CarService.Web.Areas.Worker.Pages.ManageSubTasks
 
         public async Task<IActionResult> OnPostAsync()
         {
-
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -43,7 +42,7 @@ namespace CarService.Web.Areas.Worker.Pages.ManageSubTasks
                 .Select(s => s.CompanyUserId)
                 .SingleOrDefaultAsync();
 
-            SubTask.CompanyId = company;
+            SubTask.CompanyUserId = company;
 
             _context.SubTasks.Add(SubTask);
             await _context.SaveChangesAsync();

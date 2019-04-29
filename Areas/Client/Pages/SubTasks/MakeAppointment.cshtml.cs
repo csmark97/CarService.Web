@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,9 +23,7 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
 
         public Work Work { get; set; }
         public SubTask SubTask { get; set; }
-        public List<DateTime> StartTimes { get; set; }
-        public List<DateTime> EndTimes { get; set; }
-
+        public IDictionary<DayOfWeek, OpeningDay> Opening { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -36,33 +35,20 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
 
             Opening opening = new Opening();
 
-            if (SubTask.Company.Opening != null)
+            if (SubTask.CompanyUser.Opening != null)
             {
-                opening = SubTask.Company.Opening;
-            }
+                opening = SubTask.CompanyUser.Opening;
 
-            StartTimes = new List<DateTime>()
-            {
-                opening.StartMonday, opening.StartTuesday, opening.StartWednesday,
-                opening.StartThursday, opening.StartFriday
-            };
+                Opening = new Dictionary<DayOfWeek, OpeningDay>();
 
-            //EndTimes = new List<DateTime>()
-            //{
-            //    opening.EndMonday, opening.EndTuesday, opening.EndWednesday,
-            //    opening.EndThursday, opening.EndFriday
-            //};
-
-            //StartTimes.Add(opening.StartSaturday.Value);
-            //EndTimes.Add(opening.EndSaturday.Value);
-
-            //StartTimes.Add(opening.StartSunday.Value);
-            //EndTimes.Add(opening.EndSunday.Value);
-
-            for (int i = 0; i < 7; i++)
-            {
-
-            }
+                Opening.Add(DayOfWeek.Monday, opening.Monday);
+                Opening.Add(DayOfWeek.Tuesday, opening.Tuesday);
+                Opening.Add(DayOfWeek.Wednesday, opening.Wednesday);
+                Opening.Add(DayOfWeek.Thursday, opening.Thursday);
+                Opening.Add(DayOfWeek.Friday, opening.Friday);
+                Opening.Add(DayOfWeek.Saturday, opening.Saturday);
+                Opening.Add(DayOfWeek.Sunday, opening.Sunday);
+            }            
 
             if (SubTask == null)
             {

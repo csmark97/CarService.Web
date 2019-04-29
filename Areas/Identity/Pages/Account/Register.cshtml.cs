@@ -210,21 +210,13 @@ namespace CarService.Web.Areas.Identity.Pages.Account
                 {
                     Opening opening = new Opening
                     {
-                        StartMonday = Input.StartMonday,
-                        StartTuesday = Input.StartTuesday,
-                        StartWednesday = Input.StartWednesday,
-                        StartThursday = Input.StartThursday,
-                        StartFriday = Input.StartFriday,
-                        StartSaturday = Input.StartSaturday,
-                        StartSunday = Input.StartSunday,
-
-                        EndMonday = Input.EndMonday,
-                        EndTuesday = Input.EndTuesday,
-                        EndWednesday = Input.EndWednesday,
-                        EndThursday = Input.EndThursday,
-                        EndFriday = Input.EndFriday,
-                        EndSaturday = Input.EndSaturday,
-                        EndSunday = Input.EndSunday,
+                        Monday = new OpeningDay(Input.StartMonday, Input.EndMonday),
+                        Tuesday = new OpeningDay(Input.StartTuesday, Input.EndTuesday),
+                        Wednesday = new OpeningDay(Input.StartWednesday, Input.EndWednesday),
+                        Thursday = new OpeningDay(Input.StartThursday, Input.EndThursday),
+                        Friday = new OpeningDay(Input.StartFriday, Input.EndFriday),
+                        Saturday = new OpeningDay(Input.StartSaturday, Input.EndSaturday),
+                        Sunday = new OpeningDay(Input.StartSunday, Input.EndSunday),
 
                         SaturdayOpen = Input.SaturdayOpen,
                         SundayOpen = Input.SundayOpen
@@ -251,7 +243,7 @@ namespace CarService.Web.Areas.Identity.Pages.Account
                         },
                         PrivateKey = Input.PrivateKey,
                         SecurityStamp = Guid.NewGuid().ToString(),
-                        OpeningId = openingId
+                        Opening = opening
                     };
                     role = Roles.Companies;
                 }

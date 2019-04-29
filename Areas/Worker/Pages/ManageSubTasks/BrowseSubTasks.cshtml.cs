@@ -25,14 +25,14 @@ namespace CarService.Web.Areas.Worker.Pages.ManageSubTasks
 
         public IList<SubTask> SubTasks { get;set; }
 
-        public async System.Threading.Tasks.Task OnGetAsync()
+        public async Task OnGetAsync()
         {
             var userId = User.Claims.Single(c => c.Type == UserHelper.NameIdentifierString).Value;
-            WorkerUser workerUser = await _context.WorkerUsers.FirstOrDefaultAsync(u => u.Id == userId);
+            //WorkerUser workerUser = await _context.WorkerUsers.FirstOrDefaultAsync(u => u.Id == userId);
 
-            SubTasks = await _context.SubTasks
-                .Where(u => u.CompanyId == workerUser.CompanyUserId)
-                .ToListAsync();
+            SubTasks = _context.SubTasks.ToList();
+                //.Where(u => u.CompanyUserId == workerUser.CompanyUserId)
+                //.ToListAsync();
         }
     }
 }

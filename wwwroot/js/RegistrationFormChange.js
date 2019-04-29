@@ -3,32 +3,38 @@
         $(".address").show();
         $(".privatekey").hide();
         $(".opening").hide();
+        $(".opening-day").prop('disabled', true);
     }
     if ($("#Input_UserType").val() === "WORKER") {
         $(".address").hide();
         $(".privatekey").show();
         $(".opening").hide();
+        $(".opening-day").prop('disabled', true);
     }
     if ($("#Input_UserType").val() === "COMPANY") {
         $(".address").show();
         $(".privatekey").show();
         $(".opening").show();
+        $(".opening").prop('disabled', false);
     }
     $("#Input_UserType").on('change', function () {
         if ($("#Input_UserType").val() === "CLIENT") {
             $(".address").show();
             $(".privatekey").hide();
             $(".opening").hide();
+            $(".opening-day").prop('disabled', true);
         }
         if ($("#Input_UserType").val() === "WORKER") {
             $(".address").hide();
             $(".privatekey").show();
             $(".opening").hide();
+            $(".opening-day").prop('disabled', true);
         }
         if ($("#Input_UserType").val() === "COMPANY") {
             $(".address").show();
             $(".privatekey").show();
             $(".opening").show();
+            $(".opening-day").prop('disabled', false);
         }
     });    
 

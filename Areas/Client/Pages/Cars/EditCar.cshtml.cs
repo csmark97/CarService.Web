@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using CarService.Dal;
 using CarService.Dal.Entities;
 using Microsoft.AspNetCore.Identity;
+using CarService.Web.Helper;
 
 namespace CarService.Web.Areas.Client.Pages.Cars
 {
@@ -43,8 +44,7 @@ namespace CarService.Web.Areas.Client.Pages.Cars
 
         public async Task<IActionResult> OnPostAsync()
         {
-            // TODO: extension methodba kitenni
-            var userId = User.Claims.Single(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var userId = User.Claims.Single(c => c.Type == UserHelper.NameIdentifierString).Value;
             Car.ClientUserId = userId;
 
 

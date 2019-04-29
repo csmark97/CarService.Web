@@ -29,7 +29,7 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
             var user = await _userManager.GetUserAsync(User);
             var userId = await _userManager.GetUserIdAsync(user);
 
-            SubTasks = await _context.SubTasks.ToListAsync();
+            SubTasks = await _context.SubTasks.ToListAsync();            
         }
     }
 }

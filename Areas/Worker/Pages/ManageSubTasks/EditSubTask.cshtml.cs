@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarService.Dal;
 using CarService.Dal.Entities;
+using CarService.Web.Helper;
 
 namespace CarService.Web.Areas.Worker.Pages.ManageSubTasks
 {
@@ -46,7 +47,15 @@ namespace CarService.Web.Areas.Worker.Pages.ManageSubTasks
                 return Page();
             }
 
-            _context.Attach(SubTask).State = EntityState.Modified;
+            var userId = User.Claims.Single(c => c.Type == UserHelper.NameIdentifierString).Value;
+
+            string company = await _context.WorkerUsers.Where(u => u.Id == userId)
+                .Select(s => s.CompanyUserId)
+                .SingleOrDefaultAsync();
+
+            SubTask.CompanyUserId = company;                     
+
+            _context.Attach(SubTask).State = EntityState.Modified;            
 
             try
             {
