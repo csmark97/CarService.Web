@@ -1,13 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using CarService.Dal;
 using CarService.Dal.Entities;
 using CarService.Web.Helper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarService.Web.Areas.Client.Pages.SubTasks
@@ -21,17 +24,39 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
             _context = context;
         }
 
-        public Work Work { get; set; }
+        public Service Service { get; set; }
+
+        [BindProperty]
         public SubTask SubTask { get; set; }
+
+        [BindProperty]
+        public IList<SelectListItem> Cars { get; set; }
+
         public IDictionary<DayOfWeek, OpeningDay> Opening { get; set; }
+
+        [BindProperty]
+        public InputModel Input { get; set; }
+
+        public class InputModel
+        {
+            public string AppointmentTime { get; set; }
+            public string AppointmentDay { get; set; }
+
+            [Display(Name = "Válassza ki autóját!")]
+            public Car Car { get; set; }
+        }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            var userId = User.Claims.Single(c => c.Type == UserHelper.NameIdentifierString).Value;
+            ClientUser clientUser = await _context.ClientUsers.FirstOrDefaultAsync(u => u.Id == userId);
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            SubTask = await _context.SubTasks.FirstOrDefaultAsync(s => s.Id == id);
+            SubTask = await _context.SubTasks.FirstOrDefaultAsync(s => s.Id == id);            
 
             Opening opening = new Opening();
 
@@ -39,16 +64,30 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
             {
                 opening = SubTask.CompanyUser.Opening;
 
-                Opening = new Dictionary<DayOfWeek, OpeningDay>();
+                Opening = new Dictionary<DayOfWeek, OpeningDay>
+                {
+                    { DayOfWeek.Monday, opening.Monday },
+                    { DayOfWeek.Tuesday, opening.Tuesday },
+                    { DayOfWeek.Wednesday, opening.Wednesday },
+                    { DayOfWeek.Thursday, opening.Thursday },
+                    { DayOfWeek.Friday, opening.Friday },
+                    { DayOfWeek.Saturday, opening.Saturday },
+                    { DayOfWeek.Sunday, opening.Sunday }
+                };
+            }
 
-                Opening.Add(DayOfWeek.Monday, opening.Monday);
-                Opening.Add(DayOfWeek.Tuesday, opening.Tuesday);
-                Opening.Add(DayOfWeek.Wednesday, opening.Wednesday);
-                Opening.Add(DayOfWeek.Thursday, opening.Thursday);
-                Opening.Add(DayOfWeek.Friday, opening.Friday);
-                Opening.Add(DayOfWeek.Saturday, opening.Saturday);
-                Opening.Add(DayOfWeek.Sunday, opening.Sunday);
-            }            
+            IList<Car> cars = await _context.Cars.Where(w => w.ClientUserId == userId).ToListAsync();
+
+            Cars = new List<SelectListItem>();
+            foreach (var car in cars)
+            {
+                SelectListItem carItem = new SelectListItem
+                {
+                    Value = car.Id.ToString(),
+                    Text = car.Model + " " + car.YearOfManufacture
+                };
+                Cars.Add(carItem);
+            }
 
             if (SubTask == null)
             {
@@ -62,37 +101,139 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
             var userId = User.Claims.Single(c => c.Type == UserHelper.NameIdentifierString).Value;
             ClientUser clientUser = await _context.ClientUsers.FirstOrDefaultAsync(u => u.Id == userId);
 
-            //if (!ModelState.IsValid)
-            //{
-            //    return Page();
-            //}
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
-            //_context.Cars.Add(Car);
+            string[] elementsOfDate = Input.AppointmentDay.Split('-');
+            int year, month, day;
+            year = int.Parse(elementsOfDate[0]);
+            month = int.Parse(elementsOfDate[1]);
+            day = int.Parse(elementsOfDate[2]);
 
-            //_context.Attach(Car).State = EntityState.Modified;
+            string[] elementsOfTime = Input.AppointmentTime.Split(':');
+            int hour, minute;
+            hour = int.Parse(elementsOfTime[0]);
+            minute = int.Parse(elementsOfTime[1]);
 
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!CarExists(Car.Id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
+            DateTime appointment = new DateTime(year, month, day, hour, minute, 0);
 
-            return RedirectToPage("./BrowseCar");
+            IList<WorkerUser> workerUsers = await _context.WorkerUsers.ToArrayAsync();
+
+            workerUsers.Shuffle();
+
+            WorkerUser workerForTheJob = new WorkerUser();
+
+            foreach (var worker in workerUsers)
+            {
+                bool thisWorkerIsFree = true;
+                var workingTimes = worker.Works.Select(t => new
+                {
+                    t.StartingTime,
+                    t.EndTime
+                }).ToList();
+
+                foreach (var interval in workingTimes)
+                {
+                    if (appointment >= interval.StartingTime && appointment < interval.EndTime)
+                    {
+                        thisWorkerIsFree = false;
+                    }
+                }
+
+                if (thisWorkerIsFree)
+                {
+                    workerForTheJob = worker;
+                    break;
+                }
+                else
+                {
+                    throw new Exception("Erre az idõpontra, nincs szabad munkatársunk!");
+                }
+            }
+
+            int openServiceId = ServiceExists(2/*Input.Car.Id*/);
+
+            Service service;
+
+            if (openServiceId == 0)
+            {
+                service = new Service
+                {
+                    StartingTime = appointment,
+                    EndTime = appointment.AddMinutes(SubTask.EstimtedTime),
+                    TotalPrice = SubTask.EstimatedPrice,
+                    CarId = 2/*Input.Car.Id*/
+                };
+
+                _context.Services.Add(service);
+                //_context.Attach(service).State = EntityState.Added;
+
+                await _context.SaveChangesAsync();                
+            }
+            else
+            {
+                service = await _context.Services.Where(w => w.Id == openServiceId).FirstOrDefaultAsync();
+                service.TotalPrice += SubTask.EstimatedPrice;
+
+                if (appointment.AddMinutes(SubTask.EstimtedTime) > service.EndTime)
+                {
+                    service.EndTime = appointment.AddMinutes(SubTask.EstimtedTime);
+                }
+
+                _context.Services.Add(service);
+
+                _context.Attach(service).State = EntityState.Modified;
+            }
+
+            Work work = new Work
+            {
+                StartingTime = appointment,
+                EndTime = appointment.AddMinutes(SubTask.EstimtedTime),
+                Price = SubTask.EstimatedPrice,
+                SubTaskId = SubTask.Id,
+                ServiceId = service.Id,
+                StateId = 2,
+                WorkerUserId = workerForTheJob.Id
+            };
+
+            _context.Works.Add(work);
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("./BrowseSubTasks");
         }
 
-        private bool CarExists(int id)
+        private int ServiceExists(int carId)
         {
-            return _context.Cars.Any(e => e.Id == id);
+            bool carHasService = _context.Services.Any(e => e.Id == carId);
+
+            if (carHasService)
+            {
+                var services = _context.Services
+                    .Where(e => e.Id == carId)
+                    .Select(w => new
+                    {
+                        w.Id,
+                        works = w.Works
+                    })
+                    .ToList();
+
+                List<Work> works = new List<Work>();
+
+                foreach (var service in services)
+                {
+                    foreach (var work in service.works)
+                    {
+                        if (!work.State.Equals("finished"))
+                        {
+                            return service.Id;
+                        }
+                    }
+                }
+            }
+
+            return 0;
         }
     }
 }
