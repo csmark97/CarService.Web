@@ -16,13 +16,14 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\CarService.Dal\CarService.Dal.csproj" />
+    <Folder Include="Areas\Company\" />
+    <Folder Include="Areas\Worker\Pages\Works\" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <Folder Include="Areas\Company\" />
-    <Folder Include="Areas\Worker\Pages\Works\" />
+    <ProjectReference Include="..\CarService.Bll\CarService.Bll.csproj" />
+    <ProjectReference Include="..\CarService.Dal\CarService.Dal.csproj" />
   </ItemGroup>
 
 
