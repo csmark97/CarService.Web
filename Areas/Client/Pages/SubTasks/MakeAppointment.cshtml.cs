@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using CarService.Bll.Client.MakeAppointment;
+using CarService.Bll.MakeAppointment;
 using CarService.Bll.User;
 using CarService.Dal;
 using CarService.Dal.Entities;
@@ -57,8 +57,7 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
                 return NotFound();
             }
 
-            _appUserManager.User = User;
-            ClientUser clientUser = await _appUserManager.GetUserAsync();
+            ClientUser clientUser = await AppUserManager.GetUserAsync(User);
             
             SubTask = await AppointmentManager.GetSubTaskAsync(id.Value);
 

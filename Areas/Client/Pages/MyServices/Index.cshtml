@@ -1,0 +1,31 @@
+﻿@page
+@model CarService.Web.Areas.Client.Pages.MyServices.IndexModel
+
+@foreach (var item in Model.Service)
+{
+
+    <div class="card">
+        <h5 class="card-header">Folyamatban lévő</h5>
+        <div class="card-body row">
+            <div class="column">
+                <h5 class="card-title">
+                    @Html.DisplayFor(modelItem => item.Car.Model) @Html.DisplayFor(modelItem => item.Car.YearOfManufacture)
+                </h5>
+                <p class="card-text">@Html.DisplayFor(modelItem => item.TotalPrice)</p>
+            </div>
+            <div class="column">
+                <h5 class="card-title">
+                    @Html.DisplayFor(modelItem => item.Car.Model) @Html.DisplayFor(modelItem => item.Car.YearOfManufacture)
+                </h5>
+                <p class="card-text">@Html.DisplayFor(modelItem => item.TotalPrice)</p>
+            </div>
+
+            <a class="btn btn-primary" asp-page="./Works/Index" asp-route-id="@item.Id">Szerkesztés</a>
+            <a class="btn btn-danger"asp-page="./Delete" asp-route-id="@item.Id">Törlés</a>
+        </div>
+    </div>
+
+
+
+}
+

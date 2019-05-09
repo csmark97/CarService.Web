@@ -1,0 +1,76 @@
+﻿@page
+@model CarService.Web.Areas.Client.Pages.MyServices.Works.IndexModel
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Work[0].StartingTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Work[0].EndTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Work[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Work[0].OwnerDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Work[0].CompanyDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Work[0].SubTask)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Work[0].Service)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Work[0].State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Work[0].WorkerUser)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Work) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartingTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OwnerDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubTask.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Service.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkerUser.Id)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
