@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using CarService.Dal;
 using CarService.Dal.Entities;
-using CarService.Bll.User;
+using CarService.Bll.Users;
 using CarService.Bll.MakeAppointment;
 using CarService.Bll.Works;
 
@@ -15,13 +15,13 @@ namespace CarService.Web.Areas.Client.Pages.MyServices.Works
 {
     public class IndexModel : PageModel
     {
-        private AppUserManager _appUserManager;
-        private WorkManager _workManager;
+        private UserLogic _appUserManager;
+        private WorkLogic _workManager;
 
         public IndexModel(CarServiceDbContext context)
         {
-            _appUserManager = new AppUserManager(context);
-            _workManager = new WorkManager(context);
+            _appUserManager = new UserLogic(context);
+            _workManager = new WorkLogic(context);
         }
 
         public IList<Work> Work { get;set; }
@@ -32,7 +32,7 @@ namespace CarService.Web.Areas.Client.Pages.MyServices.Works
             {
                 return NotFound();
             }
-            Work = await WorkManager.GetWorkByServiceAsync(id.Value);
+            Work = await WorkLogic.GetWorkByServiceIdAsync(id.Value);
 
             if (Work == null)
             {

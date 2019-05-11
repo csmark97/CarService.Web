@@ -16,6 +16,7 @@ using CarService.Dal;
 using CarService.Dal.Entities;
 using CarService.Dal.SeedInterfaces;
 using CarService.Dal.SeedService;
+using CarService.Dal.Manager;
 
 namespace CarService.Web
 {
@@ -41,8 +42,7 @@ namespace CarService.Web
             services.AddDbContext<CarServiceDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString(nameof(CarServiceDbContext))));
-            //services.AddDefaultIdentity<User>().AddDefaultUI(UIFramework.Bootstrap4)
-            //    .AddEntityFrameworkStores<CarServiceDbContext>();
+
             services.AddIdentity<User, IdentityRole<string>>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<CarServiceDbContext>();

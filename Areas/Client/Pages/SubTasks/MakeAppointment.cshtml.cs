@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using CarService.Bll.MakeAppointment;
-using CarService.Bll.User;
+using CarService.Bll.Users;
 using CarService.Dal;
 using CarService.Dal.Entities;
 using CarService.Web.Helper;
@@ -19,13 +19,13 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
 {
     public class MakeAppointmentModel : PageModel
     {
-        private AppUserManager _appUserManager;
-        private AppointmentManager _appointmentManager;
+        private UserLogic _appUserManager;
+        private readonly AppointmentLogic _appointmentManager;
 
         public MakeAppointmentModel(CarServiceDbContext context)
         {
-            _appUserManager = new AppUserManager(context);
-            _appointmentManager = new AppointmentManager(context);
+            _appUserManager = new UserLogic(context);
+            _appointmentManager = new AppointmentLogic(context);
         }
 
         public Service Service { get; set; }
@@ -57,18 +57,18 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
                 return NotFound();
             }
 
-            ClientUser clientUser = await AppUserManager.GetUserAsync(User);
+            ClientUser clientUser = await UserLogic.GetUserAsync(User);
             
-            SubTask = await AppointmentManager.GetSubTaskAsync(id.Value);
+            SubTask = await AppointmentLogic.GetSubTaskByIdAsync(id.Value);
 
             if (SubTask == null)
             {
                 return NotFound();
             }           
 
-            Opening = AppointmentManager.GetOpening(SubTask.CompanyUser.Opening);            
+            Opening = AppointmentLogic.GetOpening(SubTask.CompanyUser.Opening);            
 
-            Cars = await AppointmentManager.GetCarsAsync(clientUser.Id);           
+            Cars = await AppointmentLogic.GetCarsByIdAsync(clientUser.Id);           
 
             return Page();
         }
@@ -84,9 +84,9 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
 
             string[] elementsOfTime = Input.AppointmentTime.Split(':');            
 
-            DateTime appointment = AppointmentManager.CreateAppointmentDate(elementsOfDate, elementsOfTime);
+            DateTime appointment = AppointmentLogic.CreateAppointmentDate(elementsOfDate, elementsOfTime);
 
-            await AppointmentManager.MakeAppointmentAsync(appointment, Input.CarId, SubTask);           
+            await AppointmentLogic.MakeAppointmentAsync(appointment, Input.CarId, SubTask);           
 
             return RedirectToPage("./BrowseSubTasks");
         }        
