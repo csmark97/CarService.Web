@@ -19,7 +19,7 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
 {
     public class MakeAppointmentModel : PageModel
     {
-        private UserLogic _appUserManager;
+        private readonly UserLogic _appUserManager;
         private readonly AppointmentLogic _appointmentManager;
 
         public MakeAppointmentModel(CarServiceDbContext context)

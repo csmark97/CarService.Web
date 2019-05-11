@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using CarService.Dal;
 using CarService.Dal.Entities;
 
-namespace CarService.Web.Areas.Client.Pages.MyServices.Works
+namespace CarService.Web.Areas.Client.Pages.MyServices
 {
-    public class DeleteModel : PageModel
+    public class DeleteWorkModel : PageModel
     {
         private readonly CarService.Dal.CarServiceDbContext _context;
 
-        public DeleteModel(CarService.Dal.CarServiceDbContext context)
+        public DeleteWorkModel(CarService.Dal.CarServiceDbContext context)
         {
             _context = context;
         }
@@ -57,7 +57,7 @@ namespace CarService.Web.Areas.Client.Pages.MyServices.Works
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToPage("/Client/MyServices");
+            return RedirectToPage("./Index");
         }
     }
 }

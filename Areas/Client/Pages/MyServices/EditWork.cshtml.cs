@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using CarService.Dal;
 using CarService.Dal.Entities;
 
-namespace CarService.Web.Areas.Client.Pages.MyServices.Works
+namespace CarService.Web.Areas.Client.Pages.MyServices
 {
     public class EditModel : PageModel
     {

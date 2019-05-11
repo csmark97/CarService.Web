@@ -1,31 +1,75 @@
 ﻿@page
 @model CarService.Web.Areas.Client.Pages.MyServices.IndexModel
 
-@foreach (var item in Model.Service)
+@foreach (var service in Model.Services)
 {
+    <div id="accordion">
+        <div class="card">
+            <h5 class="card-header">Folyamatban lévő</h5>
+            <div class="card-body" id="headingOne">
+                <h5 class="card-title">@Html.DisplayFor(modelItem => service.Car.Brand) @Html.DisplayFor(modelItem => service.Car.Model)</h5>
+                <p class="card-text">@Html.DisplayFor(modelItem => service.Car.YearOfManufacture)</p>
+                <p class="card-text">Teljes becsült költség: @Html.DisplayFor(modelItem => service.TotalPrice) Ft</p>
 
-    <div class="card">
-        <h5 class="card-header">Folyamatban lévő</h5>
-        <div class="card-body row">
-            <div class="column">
-                <h5 class="card-title">
-                    @Html.DisplayFor(modelItem => item.Car.Model) @Html.DisplayFor(modelItem => item.Car.YearOfManufacture)
-                </h5>
-                <p class="card-text">@Html.DisplayFor(modelItem => item.TotalPrice)</p>
-            </div>
-            <div class="column">
-                <h5 class="card-title">
-                    @Html.DisplayFor(modelItem => item.Car.Model) @Html.DisplayFor(modelItem => item.Car.YearOfManufacture)
-                </h5>
-                <p class="card-text">@Html.DisplayFor(modelItem => item.TotalPrice)</p>
-            </div>
+                <a asp-page="./Delete" asp-route-id="@service.Id"><i class="fas fa-trash-alt fa-3x" title="Törlés"></i></a>
+                <a asp-page="" asp-route-id="" data-toggle="collapse" data-target="#collapseOne"><i class="fas fa-ellipsis-h fa-3x" title="Részletek"></i></a>
 
-            <a class="btn btn-primary" asp-page="./Works/Index" asp-route-id="@item.Id">Szerkesztés</a>
-            <a class="btn btn-danger"asp-page="./Delete" asp-route-id="@item.Id">Törlés</a>
+            </div>
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Kezdési időpont
+                                </th>
+                                <th>
+                                    Befejezési időpont
+                                </th>
+                                <th>
+                                    Ár
+                                </th>                                
+                                <th>
+                                    Feladat típusa
+                                </th>
+                                <th>
+                                    Műveletek
+                                </th>
+                            </tr>
+                        </thead>
+                        @foreach (var historyElement in Model.History)
+                        {
+                            if (historyElement.Value == service)
+                            {
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => historyElement.Key.StartingTime)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => historyElement.Key.EndTime)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => historyElement.Key.Price) Ft
+                                        </td>                                        
+                                        <td>
+                                            @Html.DisplayFor(modelItem => historyElement.Key.SubTask.Name)
+                                        </td>
+                                        <td>
+                                            <a asp-page="./DeleteWork" asp-route-id="@historyElement.Key.Id"><i class="fas fa-trash-alt fa-sm" title="Törlés"></i></a> |
+                                            <a asp-page="./EditWork" asp-route-id="@historyElement.Key.Id"><i class="fas fa-edit fa-sm" title="Módosítás"></i></a> |
+                                            <a asp-page="./DetailsWork" asp-route-id="@historyElement.Key.Id"><i class="fas fa-ellipsis-h fa-sm" title="Részletek"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-
-
-
 }
+
+
 

@@ -15,21 +15,34 @@ namespace CarService.Web.Areas.Client.Pages.MyServices
 {
     public class IndexModel : PageModel
     {
-        private UserLogic _appUserManager;
-        private ServiceLogic _appointmentManager;
+        private readonly UserLogic _appUserManager;
+        private readonly ServiceLogic _serviceLogic;
+        private readonly WorkLogic _workLogic;
 
         public IndexModel(CarServiceDbContext context)
         {
             _appUserManager = new UserLogic(context);
-            _appointmentManager = new ServiceLogic(context);
+            _serviceLogic = new ServiceLogic(context);
+            _workLogic = new WorkLogic(context);
         }
 
-        public IList<Service> Service { get;set; }
+        public IDictionary<Work, Service> History { get; set; }
+        public IList<Service> Services { get; set; }
 
         public async Task OnGetAsync()
         {
             ClientUser clientUser = await UserLogic.GetUserAsync(User);
-            Service = await ServiceLogic.GetMyServices(clientUser.Id);
+            Services = await ServiceLogic.GetMyServices(clientUser.Id);
+            History = new Dictionary<Work, Service>();
+            foreach (var service in Services)
+            {
+                IList<Work> works = await WorkLogic.GetWorksByServiceIdAsync(service.Id);
+                foreach (var work in works)
+                {
+                    History.Add(work, service);
+                }
+            }
+
         }
     }
 }

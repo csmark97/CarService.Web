@@ -1,0 +1,88 @@
+﻿@page
+@model CarService.Web.Areas.Worker.Pages.Works.WorkCalendarModel
+@{
+}
+@using System;
+@{DateTime today = DateTime.Today;}
+@{var culture = new System.Globalization.CultureInfo("hu-HU");}
+<h2>A következő teendői vannak</h2>
+<hr>
+
+<div class="form-group">
+    @*@for (int i = 0; i < 7; i++)
+    {
+        <div class="row">
+            <div class="col border text-center">
+                <div class="mini-box flex-fill">
+                    @today.AddDays(i + 1).ToShortDateString()
+                </div>
+                <div class="mini-box flex-fill">
+                    @culture.DateTimeFormat.GetDayName(today.AddDays(i + 1).DayOfWeek)
+                </div>
+            </div>
+            @{int cycleCounter = 0;}
+            @for (int j = Model.Opening[today.AddDays(i + 1).DayOfWeek].Start.Hour; j < Model.Opening[today.AddDays(i + 1).DayOfWeek].End.Hour; j++)
+            {
+                string btnClass;
+                int halfAnHourCount = (int)(Model.SubTask.EstimtedTime / 30);
+                @if ((i + 1) % 2 == 0 && today.AddDays((i + 1)).DayOfWeek != DayOfWeek.Saturday && today.AddDays((i + 1)).DayOfWeek != DayOfWeek.Sunday)
+                {
+                    btnClass = "btn-primary";
+                }
+                else if ((i + 1) % 2 == 1 && today.AddDays((i + 1)).DayOfWeek != DayOfWeek.Saturday && today.AddDays((i + 1)).DayOfWeek != DayOfWeek.Sunday)
+                {
+                    btnClass = "btn-info";
+                }
+                else
+                {
+                    btnClass = "btn-secondary";
+                }
+
+                if (halfAnHourCount == 1)
+                {
+                    <div class="col text-center calendar-button-group">
+                        <div class="mini-box flex-fill border calendar-button-div">
+                            <button type="button" class="btn @btnClass btn-sm calendar-button" title="@today.AddDays(i + 1).ToString("yyyy-MM-dd")">@j:00</button>
+                        </div>
+                        <div class="mini-box flex-fill border calendar-button-div">
+                            <button type="button" class="btn @btnClass btn-sm calendar-button" title="@today.AddDays(i + 1).ToString("yyyy-MM-dd")">@j:30</button>
+                        </div>
+                    </div>
+                }
+                else if (halfAnHourCount == 2)
+                {
+                    <div class="col text-center border calendar-button-group calendar-button-div">
+                        <button type="button" class="btn @btnClass btn-sm calendar-button" title="@today.AddDays(i + 1).ToString("yyyy-MM-dd")">@j:00</button>
+                    </div>
+                }
+                else if (halfAnHourCount == 3)
+                {
+                    if (cycleCounter % 3 == 0)
+                    {
+                        <div class="col text-center border calendar-button-group  calendar-button-div">
+                            <button type="button" class="btn @btnClass btn-sm calendar-button" title="@today.AddDays(i + 1).ToString("yyyy-MM-dd")">@j:00</button>
+                        </div>
+                    }
+                    else if (cycleCounter % 3 == 1)
+                    {
+                        <div class="col text-center border calendar-button-group calendar-button-div">
+                            <button type="button" class="btn @btnClass btn-sm calendar-button" title="@today.AddDays(i + 1).ToString("yyyy-MM-dd")">@j:30</button>
+                        </div>
+                    }
+                    else { }
+
+                }
+                else if (halfAnHourCount == 4)
+                {
+                    if (cycleCounter % 2 == 0)
+                    {
+                        <div class="col text-center border calendar-button-group  calendar-button-div">
+                            <button type="button" class="btn @btnClass btn-sm calendar-button" title="@today.AddDays(i + 1).ToString("yyyy-MM-dd")">@j:00</button>
+                        </div>
+                    }
+                }
+                cycleCounter++;
+            }
+        </div>
+    }*@
+</div>

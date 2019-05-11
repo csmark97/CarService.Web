@@ -7,24 +7,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using CarService.Dal;
 using CarService.Dal.Entities;
-using CarService.Bll.Users;
-using CarService.Bll.MakeAppointment;
-using CarService.Bll.Works;
 
-namespace CarService.Web.Areas.Client.Pages.MyServices.Works
+namespace CarService.Web.Areas.Client.Pages.MyServices
 {
-    public class IndexModel : PageModel
+    public class DetailsModel : PageModel
     {
-        private UserLogic _appUserManager;
-        private WorkLogic _workManager;
+        private readonly CarService.Dal.CarServiceDbContext _context;
 
-        public IndexModel(CarServiceDbContext context)
+        public DetailsModel(CarService.Dal.CarServiceDbContext context)
         {
-            _appUserManager = new UserLogic(context);
-            _workManager = new WorkLogic(context);
+            _context = context;
         }
 
-        public IList<Work> Work { get;set; }
+        public Work Work { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -32,7 +27,12 @@ namespace CarService.Web.Areas.Client.Pages.MyServices.Works
             {
                 return NotFound();
             }
-            Work = await WorkLogic.GetWorkByServiceIdAsync(id.Value);
+
+            Work = await _context.Works
+                .Include(w => w.Service)
+                .Include(w => w.State)
+                .Include(w => w.SubTask)
+                .Include(w => w.WorkerUser).FirstOrDefaultAsync(m => m.Id == id);
 
             if (Work == null)
             {
