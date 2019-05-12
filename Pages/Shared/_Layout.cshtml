@@ -26,6 +26,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
 </head>
 <body>
     @if (SignInManager.IsSignedIn(User) && User.IsInRole("Workers"))
@@ -48,7 +49,7 @@
                                 <a class="nav-link text-dark" asp-area="Worker" asp-page="/ManageSubTasks/BrowseSubTasks">Szervíztípusok kezelése</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Worker" asp-page="/Works/WorkCalendar">Naptáram</a>
+                                <a class="nav-link text-dark" asp-area="Worker" asp-page="/Works/WorkSheets">Teendőim</a>
                             </li>
                         </ul>
                     </div>

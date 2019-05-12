@@ -1,0 +1,23 @@
+﻿@page
+@model CarService.Web.Areas.Worker.Pages.Works.ReallyStartModel
+
+<h4>@Model.Work.Service.Car.Brand @Model.Work.Service.Car.Model @Model.Work.SubTask.Name</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <p class="text-warning">Valóban elkezdi a feladatot?</p>
+            <div class="form-group">
+                <input type="submit" value="Feladat elkezdése" class="btn btn-danger" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./WorkSheets" title="Vissza a feladatimhoz"><i class="fas fa-chevron-circle-left fa-3x"></i></a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

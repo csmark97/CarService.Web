@@ -1,0 +1,70 @@
+﻿@page
+@model CarService.Web.Areas.Worker.Pages.Works.WorkCalendarModel
+@{
+}
+@using System;
+@{DateTime today = DateTime.Today;}
+@{var culture = new System.Globalization.CultureInfo("hu-HU");}
+<h2>A következő teendői vannak</h2>
+<hr>
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs pull-right" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#worksheet" role="tab" aria-controls="home" aria-selected="true">Munkalap</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="profile" aria-selected="false">Üzenetek</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="worksheet" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            @Model.NextWork.Service.Car.ClientUser.Name ügyfél @Model.NextWork.Service.Car.Brand @Model.NextWork.Service.Car.Model autója következik
+                            @if (Model.NextWork.State.Name == "Requested")
+                            {
+                                <span class="badge badge-danger">Jóváhagyásra vár</span>
+                            }
+                            else if (Model.NextWork.State.Name == "Accepted")
+                            {
+                                <span class="badge badge-warning">Elvégzendő feladat</span>
+                            }
+                            else if (Model.NextWork.State.Name == "Begun")
+                            {
+                                <span class="badge badge-warning">Megkezdett</span>
+                            }
+                            else if (Model.NextWork.State.Name == "Finished" || Model.NextWork.State.Name == "PaidAndFinished")
+                            {
+                                <span class="badge badge-success">Befejezett</span>
+                            }
+                            @if (Model.NextWork.State.Name == "Accepted")
+                            {
+                                <a asp-page="./ReallyStart" asp-route-id="@Model.NextWork.Id"><span class="badge badge-primary">Elkezdem</span></a>
+                            }
+                            else if (Model.NextWork.State.Name == "Begun")
+                            {
+                                <a asp-page="./ReallyDone" asp-route-id="@Model.NextWork.Id"><span class="badge badge-primary">Befejeztem</span></a>
+                            }
+                        </h4>
+                        <p class="card-text text-danger">Határidő: @Model.NextWork.EndTime.TimeOfDay</p>
+                        <p class="card-text">Szervíz típus: @Model.NextWork.SubTask.Name</p>
+                        <a asp-page="./ModifyPrice" asp-route-id="@Model.NextWork.Id" title="Módosítás"><p class="card-text">Ár: @Model.NextWork.Price Ft</p></a>
+                        
+                        <hr />
+                        <p><h6 class="card-subtitle">Autó adatai</h6></p>
+                        <p class="card-text">Autó:  @Model.NextWork.Service.Car.Brand @Model.NextWork.Service.Car.Model</p>
+                        <p class="card-text">Rendszám: @Model.NextWork.Service.Car.LicensePlateNumber</p>
+                        <p class="card-text">Évjárat: @Model.NextWork.Service.Car.YearOfManufacture</p>
+                        <p class="card-text">Futott km: @Model.NextWork.Service.Car.Km km</p>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="profile-tab">Üzenetek</div>
+            </div>
+        </div>
+    </div>
+</div>

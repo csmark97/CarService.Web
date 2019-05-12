@@ -22,17 +22,7 @@
                 <label asp-for="Work.Price" class="control-label"></label>
                 <input asp-for="Work.Price" class="form-control" />
                 <span asp-validation-for="Work.Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Work.OwnerDescription" class="control-label"></label>
-                <input asp-for="Work.OwnerDescription" class="form-control" />
-                <span asp-validation-for="Work.OwnerDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Work.CompanyDescription" class="control-label"></label>
-                <input asp-for="Work.CompanyDescription" class="form-control" />
-                <span asp-validation-for="Work.CompanyDescription" class="text-danger"></span>
-            </div>
+            </div>            
             <div class="form-group">
                 <label asp-for="Work.SubTaskId" class="control-label"></label>
                 <select asp-for="Work.SubTaskId" class="form-control" asp-items="ViewBag.SubTaskId"></select>

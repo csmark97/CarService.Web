@@ -1,0 +1,24 @@
+﻿@page
+@model CarService.Web.Areas.Client.Pages.MyServices.ModifyPriceModel
+
+<h4>@Model.Work.Service.Car.Brand @Model.Work.Service.Car.Model @Model.Work.SubTask.Name</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">            
+            <p class="text-warning">Figyelem! A gombra kattintva tudja elfogadni a módosításokat. Annak részleteit, illetve okait keresse a feladathoz tartozó üzenetek között vagy érdeklődjön telefonon az ügyfélszolgálatunknál.</p>
+            <hr />
+            <div class="form-group">
+                <input type="submit" value="Modosítás elfogadása" class="btn btn-danger" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index" title="Vissza a szervízlistához"><i class="fas fa-chevron-circle-left fa-3x"></i></a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

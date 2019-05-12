@@ -1,0 +1,28 @@
+﻿@page
+@model CarService.Web.Areas.Worker.Pages.Works.ModifyPriceModel
+
+<h4>@Model.Work.Service.Car.Brand @Model.Work.Service.Car.Model @Model.Work.SubTask.Name</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="Price" class="control-label">Új ár</label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <p class="text-warning">Figyelem! Ha megváltoztatja az árat, a feladat megkezdéséhez az ügyfél jóváhagyására lesz szüksége!</p>
+            <div class="form-group">
+                <input type="submit" value="Ár megváltoztatása" class="btn btn-danger" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./WorkSheets" title="Vissza a feladatimhoz"><i class="fas fa-chevron-circle-left fa-3x"></i></a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

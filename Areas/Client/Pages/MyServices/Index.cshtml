@@ -5,7 +5,18 @@
 {
     <div id="accordion">
         <div class="card">
-            <h5 class="card-header">Folyamatban lévő</h5>
+            <h5 class="card-header">
+                Folyamatban lévő
+                @foreach (var work in service.Works)
+                {
+                    @if (work.StateId == 1)
+                    {
+                        <span class="badge badge-danger" title="Kérjük tekintse meg  lenti feladatok listáját!">Jóváhagyás szükséges</span>
+                        break;
+                    }                    
+                }
+
+            </h5>
             <div class="card-body" id="headingOne">
                 <h5 class="card-title">@Html.DisplayFor(modelItem => service.Car.Brand) @Html.DisplayFor(modelItem => service.Car.Model)</h5>
                 <p class="card-text">@Html.DisplayFor(modelItem => service.Car.YearOfManufacture)</p>
@@ -35,6 +46,9 @@
                                 <th>
                                     Műveletek
                                 </th>
+                                <th class="text-center">
+                                    Állapot
+                                </th>
                             </tr>
                         </thead>
                         @foreach (var historyElement in Model.History)
@@ -58,7 +72,29 @@
                                         <td>
                                             <a asp-page="./DeleteWork" asp-route-id="@historyElement.Key.Id"><i class="fas fa-trash-alt fa-sm" title="Törlés"></i></a> |
                                             <a asp-page="./EditWork" asp-route-id="@historyElement.Key.Id"><i class="fas fa-edit fa-sm" title="Módosítás"></i></a> |
-                                            <a asp-page="./DetailsWork" asp-route-id="@historyElement.Key.Id"><i class="fas fa-ellipsis-h fa-sm" title="Részletek"></i></a>
+                                            <a asp-page="./DetailsWork" asp-route-id="@historyElement.Key.Id"><i class="fas fa-ellipsis-h fa-sm" title="Részletek"></i></a>                                            
+                                        </td>
+                                        <td class="text-center">
+                                            @if (historyElement.Key.State.Name == "Requested")
+                                            {
+                                                <a asp-page="./ApproveModification" asp-route-id="@historyElement.Key.Id"><span class="badge badge-danger">Jóváhagyás szükséges</span></a>
+                                            }
+                                            @if (historyElement.Key.State.Name == "Accepted")
+                                            {
+                                                <span class="badge badge-info">Leadva</span>
+                                            }
+                                            @if (historyElement.Key.State.Name == "Begun")
+                                            {
+                                                <span class="badge badge-warning">Elkezdve</span>
+                                            }
+                                            @if (historyElement.Key.State.Name == "Finished")
+                                            {
+                                                <span class="badge badge-success">Befejezve</span>
+                                            }
+                                            @if (historyElement.Key.State.Name == "FinishedAndPaid")
+                                            {
+                                                <span class="badge badge-light">Kifizetve</span>
+                                            }
                                         </td>
                                     </tr>
                                 </tbody>

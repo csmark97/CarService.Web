@@ -16,23 +16,31 @@ namespace CarService.Web.Areas.Worker.Pages.Works
     {
         private readonly UserLogic _appUserLogic;
         private readonly AppointmentLogic _appointmentLogic;
-        private readonly CalendarLogic _calendarLogic;
+        private readonly WorkSheetLogic _calendarLogic;
 
         public WorkCalendarModel(CarServiceDbContext context)
         {
             _appUserLogic = new UserLogic(context);
             _appointmentLogic = new AppointmentLogic(context);
-            _calendarLogic = new CalendarLogic(context);
+            _calendarLogic = new WorkSheetLogic(context);
         }
 
         public IDictionary<DayOfWeek, OpeningDay> Opening { get; set; }
 
+        [BindProperty]
         public IList<Work> Works { get; set; }
+
+        [BindProperty]
+        public Work NextWork { get; set; }
+
 
         public async Task OnGetAsync()
         {
             WorkerUser workerUser = await UserLogic.GetWorkerUserAsync(User);
-            Works = await CalendarLogic.GetWorksByWorkerIdAsync(workerUser.Id);
+
+            Works = await WorkSheetLogic.GetRemainingWorksByWorkerIdAsync(workerUser.Id);
+
+            NextWork = WorkSheetLogic.GetNextWork(Works);
         }
     }
 }
