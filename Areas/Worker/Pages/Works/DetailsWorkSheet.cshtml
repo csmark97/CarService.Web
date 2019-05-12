@@ -1,0 +1,91 @@
+﻿@page
+@model CarService.Web.Areas.Worker.Pages.Works.DetailsWorkSheetModel
+@{
+}
+@using System;
+@{DateTime today = DateTime.Today;}
+@{var culture = new System.Globalization.CultureInfo("hu-HU");}
+<h2>Munkalap</h2>
+<hr>
+
+<div class="form-group">    
+    @if (Model.Work != null)
+    {
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs pull-right" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#worksheet" role="tab" aria-controls="home" aria-selected="true">Munkalap</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="profile" aria-selected="false">Üzenetek</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="worksheet" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                @Model.Work.Service.Car.ClientUser.Name ügyfél @Model.Work.Service.Car.Brand @Model.Work.Service.Car.Model autója következik
+                                @if (Model.Work.State.Name == "Requested")
+                                {
+                                    <span class="badge badge-danger">Jóváhagyásra vár</span>
+                                }
+                                else if (Model.Work.State.Name == "Accepted")
+                                {
+                                    <span class="badge badge-warning">Elvégzendő feladat</span>
+                                }
+                                else if (Model.Work.State.Name == "Begun")
+                                {
+                                    <span class="badge badge-warning">Megkezdett</span>
+                                }
+                                else if (Model.Work.State.Name == "Finished" || Model.Work.State.Name == "PaidAndFinished")
+                                {
+                                    <span class="badge badge-success">Befejezett</span>
+                                }
+                                @if (Model.Work.State.Name == "Accepted")
+                                {
+                                    <a asp-page="./ReallyStart" asp-route-id="@Model.Work.Id"><span class="badge badge-primary">Elkezdem</span></a>
+                                }
+                                else if (Model.Work.State.Name == "Begun")
+                                {
+                                    <a asp-page="./ReallyDone" asp-route-id="@Model.Work.Id"><span class="badge badge-primary">Befejeztem</span></a>
+                                }
+                            </h4>
+                            <p class="card-text text-danger">Kezdés: @Model.Work.StartingTime</p>
+                            <p class="card-text text-danger">Befejezés: @Model.Work.EndTime</p>
+                            <hr />
+                            <p class="card-text">Szervíz típus: @Model.Work.SubTask.Name</p>
+                            <a asp-page="./ModifyPrice" asp-route-id="@Model.Work.Id" title="Módosítás"><p class="card-text">Ár: @Model.Work.Price Ft</p></a>
+
+                            <hr />
+                            <p><h6 class="card-subtitle">Autó adatai</h6></p>
+                            <p class="card-text">Autó:  @Model.Work.Service.Car.Brand @Model.Work.Service.Car.Model</p>
+                            <p class="card-text">Rendszám: @Model.Work.Service.Car.LicensePlateNumber</p>
+                            <p class="card-text">Évjárat: @Model.Work.Service.Car.YearOfManufacture</p>
+                            <p class="card-text">Futott km: @Model.Work.Service.Car.Km km</p>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="profile-tab">Üzenetek</div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="worksheet" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="card-body">
+                        <h4 class="card-title">Rendszerünk szerint, ilyen azonosítójú munka nem létezik!</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div>
+    <a asp-page="./WorkSheets" title="Vissza a feladatimhoz"><i class="fas fa-chevron-circle-left fa-3x"></i></a>
+</div>

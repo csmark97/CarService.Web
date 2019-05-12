@@ -12,13 +12,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CarService.Web.Areas.Worker.Pages.Works
 {
-    public class WorkSheetModel : PageModel
+    public class DetailsWorkSheetModel : PageModel
     {
         private readonly UserLogic _appUserLogic;
         private readonly AppointmentLogic _appointmentLogic;
         private readonly WorkSheetLogic _calendarLogic;
 
-        public WorkSheetModel(CarServiceDbContext context)
+        public DetailsWorkSheetModel(CarServiceDbContext context)
         {
             _appUserLogic = new UserLogic(context);
             _appointmentLogic = new AppointmentLogic(context);
@@ -26,18 +26,14 @@ namespace CarService.Web.Areas.Worker.Pages.Works
         }
 
         [BindProperty]
-        public IList<Work> Works { get; set; }
+        public Work Work { get; set; }
 
-        [BindProperty]
-        public Work NextWork { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int? id)
         {
             WorkerUser workerUser = await UserLogic.GetWorkerUserAsync(User);
 
-            Works = await WorkSheetLogic.GetRemainingWorksByWorkerIdAsync(workerUser.Id);
-
-            NextWork = WorkSheetLogic.GetNextWork(Works);
+            Work = await WorkSheetLogic.GetWorkByIdAsync(id);
         }
     }
 }
