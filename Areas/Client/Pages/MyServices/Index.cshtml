@@ -1,9 +1,11 @@
 ﻿@page
 @model CarService.Web.Areas.Client.Pages.MyServices.IndexModel
 
-@foreach (var service in Model.Services)
+@foreach (var service in Model.ActiveServices)
 {
-    <div id="accordion">
+    string collapse = "collapse" + service.Id.ToString();
+    string accordion = "accordion" + service.Id.ToString();
+    <div id="@accordion" class="form-group">
         <div class="card">
             <h5 class="card-header">
                 Folyamatban lévő
@@ -13,7 +15,7 @@
                     {
                         <span class="badge badge-danger" title="Kérjük tekintse meg  lenti feladatok listáját!">Jóváhagyás szükséges</span>
                         break;
-                    }                    
+                    }
                 }
 
             </h5>
@@ -23,10 +25,10 @@
                 <p class="card-text">Teljes becsült költség: @Html.DisplayFor(modelItem => service.TotalPrice) Ft</p>
 
                 <a asp-page="./Delete" asp-route-id="@service.Id"><i class="fas fa-trash-alt fa-3x" title="Törlés"></i></a>
-                <a asp-page="" asp-route-id="" data-toggle="collapse" data-target="#collapseOne"><i class="fas fa-ellipsis-h fa-3x" title="Részletek"></i></a>
+                <a asp-page="" asp-route-id="" data-toggle="collapse" data-target="#@collapse"><i class="fas fa-ellipsis-h fa-3x" title="Részletek"></i></a>
 
             </div>
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div id="@collapse" class="collapse show" aria-labelledby="headingOne" data-parent="#@accordion">
                 <div class="card-body">
                     <table class="table">
                         <thead>
@@ -39,7 +41,7 @@
                                 </th>
                                 <th>
                                     Ár
-                                </th>                                
+                                </th>
                                 <th>
                                     Feladat típusa
                                 </th>
@@ -65,14 +67,14 @@
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => historyElement.Key.Price) Ft
-                                        </td>                                        
+                                        </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => historyElement.Key.SubTask.Name)
                                         </td>
                                         <td>
                                             <a asp-page="./DeleteWork" asp-route-id="@historyElement.Key.Id"><i class="fas fa-trash-alt fa-sm" title="Törlés"></i></a> |
                                             <a asp-page="./EditWork" asp-route-id="@historyElement.Key.Id"><i class="fas fa-edit fa-sm" title="Módosítás"></i></a> |
-                                            <a asp-page="./DetailsWork" asp-route-id="@historyElement.Key.Id"><i class="fas fa-ellipsis-h fa-sm" title="Részletek"></i></a>                                            
+                                            <a asp-page="./DetailsWork" asp-route-id="@historyElement.Key.Id"><i class="fas fa-ellipsis-h fa-sm" title="Részletek"></i></a>
                                         </td>
                                         <td class="text-center">
                                             @if (historyElement.Key.State.Name == "Requested")

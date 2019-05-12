@@ -28,12 +28,46 @@ namespace CarService.Web.Areas.Client.Pages.MyServices
 
         public IDictionary<Work, Service> History { get; set; }
         public IList<Service> Services { get; set; }
+        public IList<Service> ActiveServices { get; set; }
+        public IList<Service> FinishedServices { get; set; }
 
         public async Task OnGetAsync()
         {
             ClientUser clientUser = await UserLogic.GetUserAsync(User);
             Services = await ServiceLogic.GetMyServices(clientUser.Id);
             History = new Dictionary<Work, Service>();
+            ActiveServices = new List<Service>();
+            FinishedServices = new List<Service>();
+
+            foreach (var service in Services)
+            {
+                foreach (var work in service.Works)
+                {
+                    if (!work.State.Equals("Finished") || !work.State.Equals("FinishedAndPaid"))
+                    {
+                        ActiveServices.Add(service);
+                        break;
+                    }
+                }
+            }
+
+            foreach (var service in Services)
+            {
+                bool serviceIsActive = false;
+                foreach (var activeService in ActiveServices)
+                {
+                    if (service.Id == activeService.Id)
+                    {
+                        serviceIsActive = true;
+                    }
+                }
+
+                if (!serviceIsActive)
+                {
+                    FinishedServices.Add(service);
+                }
+            }
+
             foreach (var service in Services)
             {
                 IList<Work> works = await WorkLogic.GetWorksByServiceIdAsync(service.Id);
