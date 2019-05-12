@@ -1,6 +1,9 @@
 ﻿@page
 @model CarService.Web.Areas.Client.Pages.MyServices.IndexModel
 
+<h2>Szervíztörténet</h2>
+<hr>
+
 @foreach (var service in Model.ActiveServices)
 {
     string collapse = "collapse" + service.Id.ToString();
@@ -17,16 +20,13 @@
                         break;
                     }
                 }
-
             </h5>
             <div class="card-body" id="headingOne">
                 <h5 class="card-title">@Html.DisplayFor(modelItem => service.Car.Brand) @Html.DisplayFor(modelItem => service.Car.Model)</h5>
                 <p class="card-text">@Html.DisplayFor(modelItem => service.Car.YearOfManufacture)</p>
                 <p class="card-text">Teljes becsült költség: @Html.DisplayFor(modelItem => service.TotalPrice) Ft</p>
-
                 <a asp-page="./Delete" asp-route-id="@service.Id"><i class="fas fa-trash-alt fa-3x" title="Törlés"></i></a>
                 <a asp-page="" asp-route-id="" data-toggle="collapse" data-target="#@collapse"><i class="fas fa-ellipsis-h fa-3x" title="Részletek"></i></a>
-
             </div>
             <div id="@collapse" class="collapse show" aria-labelledby="headingOne" data-parent="#@accordion">
                 <div class="card-body">
@@ -81,19 +81,19 @@
                                             {
                                                 <a asp-page="./ApproveModification" asp-route-id="@historyElement.Key.Id"><span class="badge badge-danger">Jóváhagyás szükséges</span></a>
                                             }
-                                            @if (historyElement.Key.State.Name == "Accepted")
+                                            else if (historyElement.Key.State.Name == "Accepted")
                                             {
                                                 <span class="badge badge-info">Leadva</span>
                                             }
-                                            @if (historyElement.Key.State.Name == "Begun")
+                                            else if (historyElement.Key.State.Name == "Begun")
                                             {
                                                 <span class="badge badge-warning">Elkezdve</span>
                                             }
-                                            @if (historyElement.Key.State.Name == "Finished")
+                                            else if (historyElement.Key.State.Name == "Finished")
                                             {
                                                 <span class="badge badge-success">Befejezve</span>
                                             }
-                                            @if (historyElement.Key.State.Name == "FinishedAndPaid")
+                                            else if (historyElement.Key.State.Name == "FinishedAndPaid")
                                             {
                                                 <span class="badge badge-light">Kifizetve</span>
                                             }
@@ -109,74 +109,47 @@
     </div>
 }
 <div class="row">
-    <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title" title="További adatok">
-                    Title
-                </h4>
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Becsült költség: Ft</li>
-                <li class="list-group-item">Becsült munkaidő: perc</li>
-            </ul>
-            <div class="card-body text-right">
-                <a asp-page="./EditSubTask" asp-route-id=""><i class="fas fa-edit fa-lg" title="Módosítás"></i></a>
-                <a asp-page="./DeleteSubTask" asp-route-id=""><i class="fas fa-trash-alt fa-lg" title="Törlés"></i></a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title" title="További adatok">
-                    Title
-                </h4>
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Becsült költség: Ft</li>
-                <li class="list-group-item">Becsült munkaidő: perc</li>
-            </ul>
-            <div class="card-body text-right">
-                <a asp-page="./EditSubTask" asp-route-id=""><i class="fas fa-edit fa-lg" title="Módosítás"></i></a>
-                <a asp-page="./DeleteSubTask" asp-route-id=""><i class="fas fa-trash-alt fa-lg" title="Törlés"></i></a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title" title="További adatok">
-                    Title
-                </h4>
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Becsült költség: Ft</li>
-                <li class="list-group-item">Becsült munkaidő: perc</li>
-            </ul>
-            <div class="card-body text-right">
-                <a asp-page="./EditSubTask" asp-route-id=""><i class="fas fa-edit fa-lg" title="Módosítás"></i></a>
-                <a asp-page="./DeleteSubTask" asp-route-id=""><i class="fas fa-trash-alt fa-lg" title="Törlés"></i></a>
+    @foreach (var service in Model.FinishedServices)
+    {
+        string collapse = "collapse" + service.Id;
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+            <div class="card">
+                <h5 class="card-header">
+                    Korábbi
+                    <a asp-page="" asp-route-id="" data-toggle="collapse" data-target="#@collapse">
+                        <i class="fas fa-ellipsis-h fa-sm" title="Részletek"></i>
+                    </a>
+                </h5>
+                <div class="card-body">
+                    <h4 class="card-title" title="Részletekért kattintson">
+                        @service.Car.Brand @service.Car.Model
+                    </h4>
+                    <h6 class="card-subtitle">
+                        @service.Car.YearOfManufacture
+                    </h6>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Kezdés: @service.StartingTime</li>
+                    <li class="list-group-item">Vége: @service.EndTime</li>
+                    <li class="list-group-item">Végösszeg: @service.TotalPrice Ft</li>
+                </ul>
+                <ul id="@collapse" class="list-group list-group-flush collapse" aria-labelledby="headingOne">
+                    <li class="list-group-item">
+                        @foreach (var work in service.Works)
+                        {
+                            <p>@work.SubTask.Name (@work.Price Ft)</p>
+                        }
+                    </li>
+                </ul>
+                <div class="card-body text-right">
+                    <h6>
+                        <span class="badge badge-success">Befejezve</span>
+                        <a asp-page="./DownloadInvoice" asp-route-id=""><i class="fas fa-download fa-lg" title="Számla letöltése"></i></a>
+                    </h6>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title" title="További adatok">
-                    Title
-                </h4>
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Becsült költség: Ft</li>
-                <li class="list-group-item">Becsült munkaidő: perc</li>
-            </ul>
-            <div class="card-body text-right">
-                <a asp-page="./EditSubTask" asp-route-id=""><i class="fas fa-edit fa-lg" title="Módosítás"></i></a>
-                <a asp-page="./DeleteSubTask" asp-route-id=""><i class="fas fa-trash-alt fa-lg" title="Törlés"></i></a>
-            </div>
-        </div>
-    </div>
+    }
 </div>
 
 
