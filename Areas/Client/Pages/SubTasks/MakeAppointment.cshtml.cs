@@ -37,6 +37,7 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
         public IList<SelectListItem> Cars { get; set; }
 
         public IDictionary<DayOfWeek, OpeningDay> Opening { get; set; }
+        public IDictionary<DayOfWeek, Dictionary<DateTime, bool>> Opening2;
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -66,7 +67,11 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
                 return NotFound();
             }           
 
-            Opening = AppointmentLogic.GetOpening(SubTask.CompanyUser.Opening);            
+            Opening = AppointmentLogic.GetOpening(SubTask.CompanyUser.Opening);
+
+            //TODO: make a Collection which can store <DataTime, bool> × 7 (because of 7 days)
+
+            Opening2 = await AppointmentLogic.GetOpening2Async(SubTask.CompanyUser.Opening, SubTask.CompanyUserId);
 
             Cars = await AppointmentLogic.GetCarsByIdAsync(clientUser.Id);           
 
@@ -89,6 +94,6 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
             await AppointmentLogic.MakeAppointmentAsync(appointment, Input.CarId, SubTask);           
 
             return RedirectToPage("./BrowseSubTasks");
-        }        
+        }       
     }
 }
