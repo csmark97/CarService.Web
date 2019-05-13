@@ -9,98 +9,84 @@
 <hr>
 
 <div class="form-group">
-    @for (int i = 0; i < 7; i++)
+    @{ int i = 1; }
+    @foreach (var day in Model.FinalOpening)
     {
         <div class="row">
             <div class="col border text-center">
                 <div class="mini-box flex-fill">
-                    @today.AddDays(i + 1).ToShortDateString()
+                    @today.AddDays(i).ToString("MM.dd.")
                 </div>
                 <div class="mini-box flex-fill">
-                    @culture.DateTimeFormat.GetDayName(today.AddDays(i + 1).DayOfWeek)
+                    @culture.DateTimeFormat.GetDayName(today.AddDays(i).DayOfWeek)
                 </div>
             </div>
-            @{int cycleCounter = 0;}
-            @for (int j = Model.Opening[today.AddDays(i + 1).DayOfWeek].Start.Hour; j < Model.Opening[today.AddDays(i + 1).DayOfWeek].End.Hour; j++)
+            @foreach (var appointment in day.Value)
             {
                 string btnClass;
-                int halfAnHourCount = (int)(Model.SubTask.EstimtedTime / 30);
-                @if ((i + 1) % 2 == 0 && today.AddDays((i + 1)).DayOfWeek != DayOfWeek.Saturday && today.AddDays((i + 1)).DayOfWeek != DayOfWeek.Sunday)
+                string disabled = "";
+                string title = appointment.Key.ToShortDateString();
+                @if ((i + 1) % 2 == 0
+                    && appointment.Key.DayOfWeek != DayOfWeek.Saturday
+                    && appointment.Key.DayOfWeek != DayOfWeek.Sunday
+                    && appointment.Value == true)
                 {
                     btnClass = "btn-primary";
                 }
-                else if ((i + 1) % 2 == 1 && today.AddDays((i + 1)).DayOfWeek != DayOfWeek.Saturday && today.AddDays((i + 1)).DayOfWeek != DayOfWeek.Sunday)
+                else if ((i + 1) % 2 == 1
+                        && appointment.Key.DayOfWeek != DayOfWeek.Saturday
+                        && appointment.Key.DayOfWeek != DayOfWeek.Sunday
+                        && appointment.Value == true)
                 {
                     btnClass = "btn-info";
                 }
                 else
                 {
                     btnClass = "btn-secondary";
+                    disabled = "disabled";
+                    title = "Megtelt időpont";
                 }
 
-                if (halfAnHourCount == 1)
+                string minute;
+                if (appointment.Key.Minute == 0)
                 {
-                    <div class="col text-center calendar-button-group">
-                        <div class="mini-box flex-fill border calendar-button-div">
-                            <button type="button" class="btn @btnClass btn-sm calendar-button" title="@today.AddDays(i + 1).ToString("yyyy-MM-dd")">@j:00</button>
-                        </div>
-                        <div class="mini-box flex-fill border calendar-button-div">
-                            <button type="button" class="btn @btnClass btn-sm calendar-button" title="@today.AddDays(i + 1).ToString("yyyy-MM-dd")">@j:30</button>
-                        </div>
-                    </div>
+                    minute = "00";
                 }
-                else if (halfAnHourCount == 2)
+                else
                 {
-                    <div class="col text-center border calendar-button-group calendar-button-div">
-                        <button type="button" class="btn @btnClass btn-sm calendar-button" title="@today.AddDays(i + 1).ToString("yyyy-MM-dd")">@j:00</button>
-                    </div>
+                    minute = "30";
                 }
-                else if (halfAnHourCount == 3)
-                {
-                    if (cycleCounter % 3 == 0)
-                    {
-                        <div class="col text-center border calendar-button-group  calendar-button-div">
-                            <button type="button" class="btn @btnClass btn-sm calendar-button" title="@today.AddDays(i + 1).ToString("yyyy-MM-dd")">@j:00</button>
-                        </div>
-                    }
-                    else if (cycleCounter % 3 == 1)
-                    {
-                        <div class="col text-center border calendar-button-group calendar-button-div">
-                            <button type="button" class="btn @btnClass btn-sm calendar-button" title="@today.AddDays(i + 1).ToString("yyyy-MM-dd")">@j:30</button>
-                        </div>
-                    }
-                    else { }
-
-                }
-                else if (halfAnHourCount == 4)
-                {
-                    if (cycleCounter % 2 == 0)
-                    {
-                        <div class="col text-center border calendar-button-group  calendar-button-div">
-                            <button type="button" class="btn @btnClass btn-sm calendar-button" title="@today.AddDays(i + 1).ToString("yyyy-MM-dd")">@j:00</button>
-                        </div>
-                    }
-                }
-                cycleCounter++;
+                <div class="col text-center border calendar-button-group calendar-button-div">
+                    <button type="button" @disabled class="btn @btnClass btn-sm calendar-button" title="@title">@appointment.Key.Hour:@minute</button>
+                </div>
             }
         </div>
+        i++;
     }
 </div>
 
 <form method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group">
-        <input asp-for="Input.AppointmentDay" class="form-control" />
-        <input asp-for="Input.AppointmentTime" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Input.CarId"></label>
-        <select id="Select_Car" asp-for="Input.CarId" asp-items="Model.Cars" class="form-control">
-            <option value="">Válassz egyet...</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Lefoglalom!" class="btn btn-dark" />
+    <div class="row">
+        <div class="col">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.AppointmentDay">Foglalt időpont napja</label>
+                <input asp-for="Input.AppointmentDay" class="form-control" disabled/>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.AppointmentTime">Foglalt időpont ideje</label>
+                <input asp-for="Input.AppointmentTime" class="form-control" disabled/>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.CarId"></label>
+                <select id="Select_Car" asp-for="Input.CarId" asp-items="Model.Cars" class="form-control">
+                    <option value="">Válassz egyet...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Lefoglalom!" class="btn btn-dark" />
+            </div>
+        </div>
     </div>
 </form>
 
