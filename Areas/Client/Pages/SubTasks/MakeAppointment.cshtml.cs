@@ -71,7 +71,7 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
 
             //TODO: make a Collection which can store <DataTime, bool> × 7 (because of 7 days)
 
-            FinalOpening = await AppointmentLogic.GetOpening2Async(SubTask);
+            FinalOpening = await AppointmentLogic.GetFinalOpeningAsync(SubTask);
 
             Cars = await AppointmentLogic.GetCarsByIdAsync(clientUser.Id);           
 
