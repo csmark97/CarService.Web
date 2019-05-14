@@ -10,6 +10,9 @@ using CarService.Dal;
 using CarService.Dal.Entities;
 using Microsoft.AspNetCore.Identity;
 using CarService.Web.Helper;
+using CarService.Bll.Helper;
+using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.AspNetCore.Http;
 
 namespace CarService.Web.Areas.Client.Pages.Cars
 {
@@ -24,6 +27,9 @@ namespace CarService.Web.Areas.Client.Pages.Cars
 
         [BindProperty]
         public Car Car { get; set; }
+
+        [BindProperty]
+        public IFormFile FileUpload { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -44,14 +50,19 @@ namespace CarService.Web.Areas.Client.Pages.Cars
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var userId = User.Claims.Single(c => c.Type == UserHelper.NameIdentifierString).Value;
-            Car.ClientUserId = userId;
-
-
             if (!ModelState.IsValid)
             {
                 return Page();
             }
+
+            var userId = User.Claims.Single(c => c.Type == UserHelper.NameIdentifierString).Value;
+            Car.ClientUserId = userId;
+
+            await FileHelpers.UploadAsync("C:/Users/csmar/source/repos/CarService/CarService.Web/wwwroot/pictures/", FileUpload);
+
+            Car.Picture = FileUpload.FileName;
+            Car.PictureSize = FileUpload.Length;
+            Car.PictureUploadDT = DateTime.UtcNow;
 
             _context.Cars.Add(Car);
 

@@ -10,6 +10,8 @@ using CarService.Dal.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using CarService.Bll.Helper;
+using Microsoft.AspNetCore.Http.Internal;
 
 namespace CarService.Web.Areas.Client.Pages.Cars
 {
@@ -18,7 +20,6 @@ namespace CarService.Web.Areas.Client.Pages.Cars
         private const string UploadFiles = "UploadFiles";
         private readonly CarServiceDbContext _context;
         private readonly UserManager<User> _userManager;
-        public IFormFile MyProperty { get; set; }
         public AddCarModel(CarServiceDbContext context, UserManager<User> userManager)
         {
             _context = context;
@@ -32,17 +33,27 @@ namespace CarService.Web.Areas.Client.Pages.Cars
 
         [BindProperty]
         public Car Car { get; set; }
+
+        [BindProperty]
+        public IFormFile FileUpload { get; set; }
+
         public string userId { get; private set; }
 
         public async Task<IActionResult> OnPostAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            Car.ClientUserId = user.Id;
-
+        {           
             if (!ModelState.IsValid)
             {
                 return Page();
             }
+
+            var user = await _userManager.GetUserAsync(User);
+            Car.ClientUserId = user.Id;
+
+            await FileHelpers.UploadAsync("C:/Users/csmar/source/repos/CarService/CarService.Web/wwwroot/pictures/", FileUpload);            
+
+            Car.Picture = FileUpload.FileName;
+            Car.PictureSize = FileUpload.Length;
+            Car.PictureUploadDT = DateTime.UtcNow;
 
             _context.Cars.Add(Car);
             await _context.SaveChangesAsync();

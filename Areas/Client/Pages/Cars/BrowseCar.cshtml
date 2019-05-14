@@ -8,12 +8,29 @@
 <h1>Autóim</h1>
 
 <div class="row">
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+        <div class="card">
+            <div class="text-center">
+                <a class="" asp-area="Client" asp-page="/Cars/AddCar">
+                    <i class="fas fa-plus-circle card-img-top plus-card fa-7x" title="Hozzáadás"></i>
+                </a>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title text-center">
+                    <a class="" asp-area="Client" asp-page="/Cars/AddCar">
+                        Új autó hozzáadása
+                    </a>
+                </h5>
+            </div>
+        </div>
+    </div>
     @foreach (var item in Model.Car)
     {
-        <div class="col-sm-6 col-md-4 col-lg-3 mb-3" >
+        item.Picture = "/pictures/" + item.Picture;
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
             <div class="card">
                 <a asp-page="./DetailsCar" asp-route-id="@item.Id">
-                    <img class="card-img-top" src="https://www.autonavigator.hu/wp-content/uploads/2017/01/190527_source-1200x800.jpg" alt="Autója képe" title="További adatok"> 
+                    <img class="card-img-top" src="@item.Picture" alt="Autója képe" title="További adatok">
                 </a>
                 <div class="card-body">
                     <h4 class="card-title" title="További adatok">
@@ -29,25 +46,9 @@
                 </ul>
                 <div class="card-body text-right">
                     <a asp-page="./EditCar" asp-route-id="@item.Id"><i class="fas fa-edit fa-lg" title="Módosítás"></i></a>
-                    <a asp-page="./DeleteCar" asp-route-id="@item.Id"><i class="fas fa-trash-alt fa-lg" title="Törlés"></i></a>                    
+                    <a asp-page="./DeleteCar" asp-route-id="@item.Id"><i class="fas fa-trash-alt fa-lg" title="Törlés"></i></a>
                 </div>
             </div>
         </div>
     }
-    <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
-        <div class="card">
-            <div class="text-center">
-                <a class="" asp-area="Client" asp-page="/Cars/AddCar">
-                    <i class="fas fa-plus-circle card-img-top plus-card fa-7x" title="Hozzáadás"></i>
-                </a>
-            </div>
-                <div class="card-body">
-                    <h5 class="card-title text-center">
-                        <a class="" asp-area="Client" asp-page="/Cars/AddCar">
-                            Új autó hozzáadása
-                        </a>
-                    </h5>
-                </div>
-        </div>
-    </div>
 </div>

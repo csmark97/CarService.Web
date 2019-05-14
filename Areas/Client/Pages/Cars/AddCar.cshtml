@@ -7,9 +7,9 @@
 
 <h1>Autó hozzáadása</h1>
 
-
 <hr />
-<form method="post">
+
+<form method="post" enctype="multipart/form-data">
     <h4>Autó</h4>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
@@ -54,8 +54,9 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label">Kép felöltése</label>
-        <input class="form-control-file" type="file" name="files">
+        <label asp-for="FileUpload" class="control-label">Kép</label>
+        <input asp-for="FileUpload" type="file" class="form-control" style="height:auto" />
+        <span asp-validation-for="FileUpload" class="text-danger"></span>
     </div>
     <div class="form-group">
         <input type="submit" value="Hozzáadás" class="btn btn-primary" />
