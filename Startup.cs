@@ -17,6 +17,8 @@ using CarService.Dal.Entities;
 using CarService.Dal.SeedInterfaces;
 using CarService.Dal.SeedService;
 using CarService.Dal.Manager;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using CarService.Web.Services;
 
 namespace CarService.Web
 {
@@ -46,6 +48,10 @@ namespace CarService.Web
             services.AddIdentity<User, IdentityRole<string>>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<CarServiceDbContext>();
+
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+
+            services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddScoped<IRoleSeedService, RoleSeedService>();
 
