@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using CarService.Bll.EmailService;
 using CarService.Bll.MakeAppointment;
 using CarService.Bll.Users;
 using CarService.Dal;
 using CarService.Dal.Entities;
 using CarService.Web.Helper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,11 +23,13 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
     {
         private readonly UserLogic _appUserManager;
         private readonly AppointmentLogic _appointmentManager;
+        private readonly EmailLogic _emailLogic;
 
-        public MakeAppointmentModel(CarServiceDbContext context)
+        public MakeAppointmentModel(CarServiceDbContext context, IEmailSender emailSender)
         {
             _appUserManager = new UserLogic(context);
             _appointmentManager = new AppointmentLogic(context);
+            _emailLogic = new EmailLogic(context, emailSender);
         }
 
         public Service Service { get; set; }
@@ -69,8 +73,6 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
 
             Opening = AppointmentLogic.GetOpening(SubTask.CompanyUser.Opening);
 
-            //TODO: make a Collection which can store <DataTime, bool> × 7 (because of 7 days)
-
             FinalOpening = await AppointmentLogic.GetFinalOpeningAsync(SubTask);
 
             Cars = await AppointmentLogic.GetCarsByIdAsync(clientUser.Id);           
@@ -91,7 +93,9 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
 
             DateTime appointment = AppointmentLogic.CreateAppointmentDate(elementsOfDate, elementsOfTime);
 
-            await AppointmentLogic.MakeAppointmentAsync(appointment, Input.CarId, SubTask);           
+            Work work = await AppointmentLogic.MakeAppointmentAsync(appointment, Input.CarId, SubTask);
+
+            await _emailLogic.SendStatusChangeEmailAsync(work.WorkerUser, work);
 
             return RedirectToPage("./BrowseSubTasks");
         }       

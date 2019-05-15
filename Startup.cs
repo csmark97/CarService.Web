@@ -18,8 +18,7 @@ using CarService.Dal.SeedInterfaces;
 using CarService.Dal.SeedService;
 using CarService.Dal.Manager;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using CarService.Web.Services;
-
+using CarService.Bll.EmailService;
 namespace CarService.Web
 {
     public class Startup

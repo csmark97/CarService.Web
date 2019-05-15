@@ -9,16 +9,23 @@ using Microsoft.EntityFrameworkCore;
 using CarService.Dal;
 using CarService.Dal.Entities;
 using CarService.Bll.WorkCalendar;
+using CarService.Bll.Users;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using CarService.Bll.EmailService;
 
 namespace CarService.Web.Areas.Worker.Pages.Works
 {
     public class ModifyPriceModel : PageModel
     {
         private readonly WorkSheetLogic _workSheetLogic;
+        private readonly UserLogic _userLogic;
+        private readonly EmailLogic _emailLogic;
 
-        public ModifyPriceModel(CarService.Dal.CarServiceDbContext context)
+        public ModifyPriceModel(CarServiceDbContext context, IEmailSender emailSender)
         {
             _workSheetLogic = new WorkSheetLogic(context);
+            _userLogic = new UserLogic(context);
+            _emailLogic = new EmailLogic(context, emailSender);
         }
 
         [BindProperty]
@@ -52,11 +59,15 @@ namespace CarService.Web.Areas.Worker.Pages.Works
                 return Page();
             }
 
+            WorkerUser workerUser = await UserLogic.GetWorkerUserAsync(User);
+
             Work = await WorkSheetLogic.GetWorkByIdAsync(Work.Id);
             Work.Price = Price;
             Work.StateId = 1;
 
-            await WorkSheetLogic.ModifyWorkAsync(Work);            
+            await WorkSheetLogic.ModifyWorkAsync(Work);
+
+            await _emailLogic.SendStatusChangeEmailAsync(workerUser, Work);
 
             return RedirectToPage("./WorkSheets");
         }

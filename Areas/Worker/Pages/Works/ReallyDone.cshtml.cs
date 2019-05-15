@@ -9,16 +9,21 @@ using Microsoft.EntityFrameworkCore;
 using CarService.Dal;
 using CarService.Dal.Entities;
 using CarService.Bll.WorkCalendar;
+using CarService.Bll.Users;
+using CarService.Bll.EmailService;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace CarService.Web.Areas.Worker.Pages.Works
 {
     public class ReallyDoneModel : PageModel
     {
         private readonly WorkSheetLogic _workSheetLogic;
+        private readonly EmailLogic _emailLogic;
 
-        public ReallyDoneModel(CarService.Dal.CarServiceDbContext context)
+        public ReallyDoneModel(CarServiceDbContext context, IEmailSender emailSender)
         {
             _workSheetLogic = new WorkSheetLogic(context);
+            _emailLogic = new EmailLogic(context, emailSender);
         }
 
         [BindProperty]
@@ -48,11 +53,14 @@ namespace CarService.Web.Areas.Worker.Pages.Works
                 return Page();
             }
 
-            Work = await WorkSheetLogic.GetWorkByIdAsync(Work.Id);
+            WorkerUser workerUser = await UserLogic.GetWorkerUserAsync(User);
 
+            Work = await WorkSheetLogic.GetWorkByIdAsync(Work.Id);
             Work.StateId = 5;
 
-            await WorkSheetLogic.ModifyWorkAsync(Work);            
+            await WorkSheetLogic.ModifyWorkAsync(Work);
+           
+            await _emailLogic.SendStatusChangeEmailAsync(workerUser, Work);
 
             return RedirectToPage("./WorkSheets");
         }
