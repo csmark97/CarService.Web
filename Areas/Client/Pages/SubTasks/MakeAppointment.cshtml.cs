@@ -53,6 +53,9 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
 
             [Display(Name = "Válassza ki autóját!")]
             public int CarId { get; set; }
+
+            [Display(Name = "Megjegyzés")]
+            public string Description { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -93,7 +96,7 @@ namespace CarService.Web.Areas.Client.Pages.SubTasks
 
             DateTime appointment = AppointmentLogic.CreateAppointmentDate(elementsOfDate, elementsOfTime);
 
-            Work work = await AppointmentLogic.MakeAppointmentAsync(appointment, Input.CarId, SubTask);
+            Work work = await AppointmentLogic.MakeAppointmentAsync(appointment, Input.CarId, SubTask, Input.Description);
 
             await _emailLogic.SendStatusChangeEmailAsync(work.WorkerUser, work);
 

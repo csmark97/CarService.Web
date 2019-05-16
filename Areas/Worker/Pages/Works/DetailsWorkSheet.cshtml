@@ -5,7 +5,7 @@
 @using System;
 @{DateTime today = DateTime.Today;}
 @{var culture = new System.Globalization.CultureInfo("hu-HU");}
-<h2>Munkalap</h2>
+<h2>@Model.Work.SubTask.Name (@Model.Work.Service.Car.Brand @Model.Work.Service.Car.Model)</h2>
 <hr>
 
 <div class="form-group">    
@@ -27,7 +27,7 @@
                     <div class="tab-pane fade show active" id="worksheet" role="tabpanel" aria-labelledby="home-tab">
                         <div class="card-body">
                             <h4 class="card-title">
-                                @Model.Work.Service.Car.ClientUser.Name ügyfél @Model.Work.Service.Car.Brand @Model.Work.Service.Car.Model autója következik
+                                @Model.Work.Service.Car.ClientUser.Name ügyfél @Model.Work.Service.Car.Brand @Model.Work.Service.Car.Model autója
                                 @if (Model.Work.State.Name == "Requested")
                                 {
                                     <span class="badge badge-danger">Jóváhagyásra vár</span>
@@ -67,7 +67,57 @@
                             <p class="card-text">Futott km: @Model.Work.Service.Car.Km km</p>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="profile-tab">Üzenetek</div>
+                    <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="profile-tab">
+                        <div id="messagebox2" class="container overflow-auto" style="max-height:400px;">
+                            @foreach (var message in Model.Work.Messages)
+                            {
+                                @if (Model.Work.WorkerUserId == message.SenderId)
+                                {
+                                    <div class="message-candidate float-left">
+                                        <div class="row">
+                                            <div class="col-xs-8 col-md-6">
+                                                <p class="message-name">Ön Üzenete</p>
+                                            </div>
+                                            <div class="col-xs-4 col-md-6 text-right message-date">
+                                                <small>@message.Time</small>
+                                            </div>
+                                        </div>
+                                        <div class="row message-text">
+                                            <h6>@message.Text</h6>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="message-hiring-manager float-right">
+                                        <div class="row">
+                                            <div class="col-xs-8 col-md-6">
+                                                <p class="message-name">@message.Sender.Name</p>
+                                            </div>
+                                            <div class="col-xs-4 col-md-6 text-right message-date">
+                                                <small>@message.Time</small>
+                                            </div>
+                                        </div>
+                                        <div class="row message-text ">
+                                            <h6>@message.Text</h6>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="container">
+                            <form method="post">
+                                <hr />
+                                <div class="form-group">
+                                    <label asp-for="Message"></label>
+                                    <textarea asp-for="Message.Text" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group float-right">
+                                    <input type="submit" value="Elküld" class="btn btn-primary" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -27,9 +27,9 @@
                 string disabled = "";
                 string title = appointment.Key.ToShortDateString();
                 @if ((i + 1) % 2 == 0
-                    && appointment.Key.DayOfWeek != DayOfWeek.Saturday
-                    && appointment.Key.DayOfWeek != DayOfWeek.Sunday
-                    && appointment.Value == true)
+                   && appointment.Key.DayOfWeek != DayOfWeek.Saturday
+                   && appointment.Key.DayOfWeek != DayOfWeek.Sunday
+                   && appointment.Value == true)
                 {
                     btnClass = "btn-primary";
                 }
@@ -71,17 +71,21 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Input.AppointmentDay">Foglalt időpont napja</label>
-                <input asp-for="Input.AppointmentDay" class="form-control"/>
+                <input asp-for="Input.AppointmentDay" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="Input.AppointmentTime">Foglalt időpont ideje</label>
-                <input asp-for="Input.AppointmentTime" class="form-control"/>
+                <input asp-for="Input.AppointmentTime" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="Input.CarId"></label>
                 <select id="Select_Car" asp-for="Input.CarId" asp-items="Model.Cars" class="form-control">
                     <option value="">Válassz egyet...</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Description"></label>
+                <textarea asp-for="Input.Description" class="form-control"></textarea>
             </div>
             <div class="form-group">
                 <input type="submit" value="Lefoglalom!" class="btn btn-dark" />

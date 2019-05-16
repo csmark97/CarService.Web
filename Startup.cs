@@ -46,13 +46,14 @@ namespace CarService.Web
 
             services.AddIdentity<User, IdentityRole<string>>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<CarServiceDbContext>();
+                .AddEntityFrameworkStores<CarServiceDbContext>()
+                .AddDefaultTokenProviders();
 
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
 
             services.AddSingleton<IEmailSender, EmailSender>();
 
-            services.AddScoped<IRoleSeedService, RoleSeedService>();
+            services.AddScoped<IRoleSeedService, RoleSeedService>();        
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

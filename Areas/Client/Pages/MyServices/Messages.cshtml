@@ -1,0 +1,66 @@
+﻿@page
+@model CarService.Web.Areas.Client.Pages.MyServices.MessagesModel;
+
+<h4>@Model.Work.SubTask.Name (@Model.Work.Service.Car.Brand @Model.Work.Service.Car.Model) munkához tartozó üzenetek</h4>
+<hr />
+<div class="row">
+    <div id="messagebox" class="container overflow-auto" style="max-height:400px;">
+        @foreach (var message in Model.Work.Messages)
+        {
+            @if (Model.ClientUser.Id != message.SenderId)
+            {
+                <div class="message-candidate float-left">
+                    <div class="row">
+                        <div class="col-xs-8 col-md-6">
+                            <p class="message-name">@message.Sender.Name</p>
+                        </div>
+                        <div class="col-xs-4 col-md-6 text-right message-date">
+                            <small>@message.Time</small>
+                        </div>
+                    </div>
+                    <div class="row message-text">
+                        <h6>@message.Text</h6>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="message-hiring-manager float-right">
+                    <div class="row">
+                        <div class="col-xs-8 col-md-6">
+                            <p class="message-name">Ön üzenete</p>
+                        </div>
+                        <div class="col-xs-4 col-md-6 text-right message-date">
+                            <small>@message.Time</small>
+                        </div>
+                    </div>
+                    <div class="row message-text ">
+                        <h6>@message.Text</h6>
+                    </div>
+                </div>
+            }
+        }
+
+
+    </div>
+    <div class="container">
+        <form method="post">
+            <hr />
+            <div class="form-group">
+                <label asp-for="Message"></label>
+                <textarea asp-for="Message.Text" class="form-control"></textarea>
+            </div>
+            <div class="form-group float-right">
+                <input type="submit" value="Elküld" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index" title="Vissza a listára"><i class="fas fa-chevron-circle-left fa-3x"></i></a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

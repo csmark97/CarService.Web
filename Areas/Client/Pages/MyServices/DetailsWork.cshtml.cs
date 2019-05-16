@@ -7,16 +7,18 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using CarService.Dal;
 using CarService.Dal.Entities;
+using CarService.Dal.Manager;
+using CarService.Bll.Works;
 
 namespace CarService.Web.Areas.Client.Pages.MyServices
 {
     public class DetailsModel : PageModel
     {
-        private readonly CarService.Dal.CarServiceDbContext _context;
+        private readonly WorkLogic _workLogic;
 
-        public DetailsModel(CarService.Dal.CarServiceDbContext context)
+        public DetailsModel(CarServiceDbContext context)
         {
-            _context = context;
+            _workLogic = new WorkLogic(context);
         }
 
         public Work Work { get; set; }
@@ -28,11 +30,7 @@ namespace CarService.Web.Areas.Client.Pages.MyServices
                 return NotFound();
             }
 
-            Work = await _context.Works
-                .Include(w => w.Service)
-                .Include(w => w.State)
-                .Include(w => w.SubTask)
-                .Include(w => w.WorkerUser).FirstOrDefaultAsync(m => m.Id == id);
+            Work = await WorkLogic.GetWorkByIdAsync(id.Value);            
 
             if (Work == null)
             {

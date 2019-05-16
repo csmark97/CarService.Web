@@ -2,55 +2,57 @@
 @model CarService.Web.Areas.Client.Pages.MyServices.DetailsModel
 
 <div>
-    <h4>Work</h4>
+    <h4>Munka</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Work.StartingTime)
+            Kezdés
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Work.StartingTime)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Work.EndTime)
+            Befejezés
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Work.EndTime)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Work.Price)
+            Ár
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Work.Price)
-        </dd>        
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Work.SubTask)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Work.SubTask.Id)
+            @Html.DisplayFor(model => model.Work.Price) Ft
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Work.Service)
+            Feladat jellege
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Work.Service.Id)
+            @Html.DisplayFor(model => model.Work.SubTask.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Work.State)
+            Állapot
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Work.State.Id)
+            @Html.DisplayFor(model => model.Work.State.NameHungarian)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Work.WorkerUser)
+            Feladatot végzi
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Work.WorkerUser.Id)
+            @Html.DisplayFor(model => model.Work.WorkerUser.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Autó
+        </dt>
+        <dd class="col-sm-10">
+            <a asp-page="../Cars/DetailsCar" asp-route-id="@Model.Work.Service.Car.Id">@Html.DisplayFor(model => model.Work.Service.Car.Brand) @Html.DisplayFor(model => model.Work.Service.Car.Model)</a>
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Work.Id">Edit</a> |
-    <a asp-page="./Index">Vissza a listára</a>
+    <a asp-page="./Messages" asp-route-id="@Model.Work.Id" title="A munkához tartozó üzenetek megtekintése"><i class="fa fa-envelope fa-3x" aria-hidden="true"></i></a>
+</div>
+<div>
+    <a asp-page="./Index" title="Vissza a listára"><i class="fas fa-chevron-circle-left fa-3x"></i></a>
 </div>
 

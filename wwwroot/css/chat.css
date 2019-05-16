@@ -1,0 +1,38 @@
+﻿.message-candidate {
+    background: rgba(85,85,85,0.2);
+    padding: 20px;
+    width: 600px;
+    margin-bottom: 10px;
+}
+
+.message-hiring-manager {
+    background: rgba(0,153,255,0.2);
+    padding: 20px;
+    width: 600px;
+    margin-bottom: 10px;
+}
+
+.messaging {
+    /*max-width: 600px;*/
+    margin-top: 20px;
+}
+
+.message-text {
+    margin-top: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.message-photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center center;
+    display: inline-block;
+}
+
+.message-name {
+    margin-left: 10px;
+    display: inline-block;
+}
