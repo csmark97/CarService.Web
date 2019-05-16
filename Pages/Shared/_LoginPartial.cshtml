@@ -10,47 +10,64 @@
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User) && User.IsInRole("Clients"))
     {
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Személyes
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="nav-link dropdown-item" asp-area="Client" asp-page="/Cars/BrowseCar">Autóim</a>
-            <div class="dropdown-divider"></div>
-            <a class="nav-link dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profilom</a>
-        </div>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Személyes
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="nav-link dropdown-item" asp-area="Client" asp-page="/Cars/BrowseCar">Autóim</a>
+                <div class="dropdown-divider"></div>
+                <a class="nav-link dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profilom</a>
+            </div>
 
-    </li>
-    <li class="nav-item">
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-            <button type="submit" class="nav-link btn btn-link text-dark">Kijelentkezés</button>
-        </form>
-    </li>
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <button type="submit" class="nav-link btn btn-link text-dark">Kijelentkezés</button>
+            </form>
+        </li>
     }
     else if (SignInManager.IsSignedIn(User) && User.IsInRole("Workers"))
     {
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Személyes
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="nav-link dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profilom</a>
-        </div>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Személyes
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="nav-link dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profilom</a>
+            </div>
 
-    </li>
-    <li class="nav-item">
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-            <button type="submit" class="nav-link btn btn-link text-dark">Kijelentkezés</button>
-        </form>
-    </li>
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <button type="submit" class="nav-link btn btn-link text-dark">Kijelentkezés</button>
+            </form>
+        </li>
+    }
+    else if (SignInManager.IsSignedIn(User) && User.IsInRole("Companies"))
+    {
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Személyes
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="nav-link dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profilom</a>
+            </div>
+
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <button type="submit" class="nav-link btn btn-link text-dark">Kijelentkezés</button>
+            </form>
+        </li>
     }
     else
     {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Regisztráció</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Belépés</a>
-    </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Regisztráció</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Belépés</a>
+        </li>
     }
 </ul>

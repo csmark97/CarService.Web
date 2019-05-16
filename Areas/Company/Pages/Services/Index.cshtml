@@ -1,0 +1,63 @@
+﻿@page
+@model CarService.Web.Areas.Company.Pages.Services.IndexModel
+@{
+}
+
+<h2>Szervíztörténet</h2>
+<hr>
+
+<div class="row">
+    @foreach (var service in Model.Services)
+    {
+        bool allFinished = true; ;
+        foreach (var work in service.Works)
+        {
+            if (!work.State.Name.Equals("Finished"))
+            {
+                allFinished = false;
+                break;
+            }
+        }
+        if (allFinished)
+        {
+            string collapse = "collapse" + service.Id;
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+                <div class="card">
+                    <h5 class="card-header">
+                        Korábbi
+                        <a asp-page="" asp-route-id="" data-toggle="collapse" data-target="#@collapse">
+                            <i class="fas fa-ellipsis-h fa-sm" title="Részletek"></i>
+                        </a>
+                    </h5>
+                    <div class="card-body">
+                        <h4 class="card-title" title="Részletekért kattintson">
+                            @service.Car.Brand @service.Car.Model
+                        </h4>
+                        <h6 class="card-subtitle">
+                            @service.Car.YearOfManufacture
+                        </h6>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Kezdés: @service.StartingTime</li>
+                        <li class="list-group-item">Vége: @service.EndTime</li>
+                        <li class="list-group-item">Végösszeg: @service.TotalPrice Ft</li>
+                    </ul>
+                    <ul id="@collapse" class="list-group list-group-flush collapse" aria-labelledby="headingOne">
+                        <li class="list-group-item">
+                            @foreach (var work in service.Works)
+                            {
+                                <p>@work.SubTask.Name (@work.Price Ft)</p>
+                            }
+                        </li>
+                    </ul>
+                    <div class="card-body text-right">
+                        <h6>
+                            <span class="badge badge-success">Befejezve</span>
+                            <a asp-page="./ReallyPaid" asp-route-id="@service.Id"><i class="fas fa-check fa-lg" title="Fizetve"></i></a>
+                        </h6>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

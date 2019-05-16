@@ -11,7 +11,6 @@ namespace CarService.Web.Pages
     {
         public void OnGet()
         {
-
         }
     }
 }

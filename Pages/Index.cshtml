@@ -14,9 +14,21 @@
         <h1 class="display-4">Üdvözöljük a dolgozói felületen!</h1>
     </div>
 }
-else
+else if (SignInManager.IsSignedIn(User) && User.IsInRole("Companies"))
+{
+    <div class="text-center">
+        <h1 class="display-4">Üdvözöljük a céges felületen!</h1>
+    </div>
+}
+else if (SignInManager.IsSignedIn(User) && User.IsInRole("Clients"))
 {
     <div class="text-center">
         <h1 class="display-4">Üdvözöljük a felhasználói felületen!</h1>
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4">Jelentkezzen be vagy hozzon létre új fiókot!</h1>
     </div>
 }

@@ -12,24 +12,27 @@ using CarService.Bll.WorkCalendar;
 using CarService.Bll.Users;
 using CarService.Bll.EmailService;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using CarService.Bll.Company;
 
-namespace CarService.Web.Areas.Worker.Pages.Works
+namespace CarService.Web.Areas.Company.Pages.Services
 {
-    public class ReallyDoneModel : PageModel
+    public class ReallyPaidModel : PageModel
     {
         private readonly WorkSheetLogic _workSheetLogic;
         private readonly EmailLogic _emailLogic;
         private readonly UserLogic _userLogic;
+        private readonly CompanyLogic _companyLogic;
 
-        public ReallyDoneModel(CarServiceDbContext context, IEmailSender emailSender)
+        public ReallyPaidModel(CarServiceDbContext context, IEmailSender emailSender)
         {
             _workSheetLogic = new WorkSheetLogic(context);
             _emailLogic = new EmailLogic(context, emailSender);
             _userLogic = new UserLogic(context);
+            _companyLogic = new CompanyLogic(context);
         }
 
         [BindProperty]
-        public Work Work { get; set; }
+        public Service Service { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -37,10 +40,10 @@ namespace CarService.Web.Areas.Worker.Pages.Works
             {
                 return NotFound();
             }
-            
-            Work = await WorkSheetLogic.GetWorkByIdAsync(id);
 
-            if (Work == null)
+            Service = await CompanyLogic.GetServiceByIdAsync(id.Value);
+
+            if (Service == null)
             {
                 return NotFound();
             }
@@ -57,14 +60,18 @@ namespace CarService.Web.Areas.Worker.Pages.Works
 
             WorkerUser workerUser = await UserLogic.GetWorkerUserAsync(User);
 
-            Work = await WorkSheetLogic.GetWorkByIdAsync(Work.Id);
-            Work.StateId = 5;
+            Service = await CompanyLogic.GetServiceByIdAsync(Service.Id);
 
-            await WorkSheetLogic.ModifyWorkAsync(Work);
-           
-            await _emailLogic.SendStatusChangeEmailAsync(workerUser, Work);
+            foreach (var work in Service.Works)
+            {
+                work.StateId = 6;
+                await WorkSheetLogic.ModifyWorkAsync(work);
+                
+            }
 
-            return RedirectToPage("./WorkSheets");
+            await _emailLogic.SendStatusChangeEmailAsync(Service);
+
+            return RedirectToPage("./Index");
         }
     }
 }
